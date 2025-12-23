@@ -65,8 +65,12 @@ section{ width: 100%; padding: var(--spacing-2xl) 0; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(12px);
+
+  /* Mejor look "glass" */
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
   border-bottom: 1px solid rgba(0,0,0,0.08);
   transition: transform var(--transition);
 }
@@ -83,14 +87,18 @@ section{ width: 100%; padding: var(--spacing-2xl) 0; }
 }
 
 .logo{
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-forest);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+/* Ajuste clave: logo como IMAGEN */
+.logo img{
+  height: 44px;
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.18));
 }
 
 .nav-links{
@@ -769,3 +777,58 @@ section{ width: 100%; padding: var(--spacing-2xl) 0; }
   z-index: 1100;
 }
 .wsp-float:hover{ transform: translateY(-3px); }
+/* =========================
+   MAPA (UBICACIÓN) - FULL WIDTH + MENOS ALTO
+   ========================= */
+.map-section{
+  background: #fff;
+  padding-top: var(--spacing-2xl);
+  padding-bottom: var(--spacing-2xl);
+}
+
+/* Card full width */
+.map-card{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 45px rgba(0,0,0,0.10);
+}
+
+.map-card--full{
+  width: 100%;
+  max-width: none;
+  border-radius: 0;               /* full bleed prolijo */
+  border-left: 0;
+  border-right: 0;
+}
+
+/* Menos alto: control por altura fija */
+.map-embed{
+  width: 100%;
+  height: clamp(260px, 34vw, 380px);  /* <- ajustá si querés más/menos */
+  background: #e9e9e9;
+}
+
+.map-embed iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Botones alineados y con padding prolijo */
+.map-actions{
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  justify-content: flex-end;
+}
+
+@media (max-width: 900px){
+  .map-actions{
+    justify-content: center;
+  }
+}
