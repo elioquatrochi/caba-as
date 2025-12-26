@@ -29,6 +29,7 @@
         <img src="img/logo-solyluna.svg" alt="Cabañas Sol y Luna" />
       </a>
 
+      <!-- Desktop links -->
       <ul class="nav-links" id="navLinks">
         <li><a href="#propiedades">Cabañas</a></li>
         <li><a href="#porque">¿Por qué elegirnos?</a></li>
@@ -37,10 +38,7 @@
         <li><a href="#contacto">Contacto</a></li>
       </ul>
 
-      <div class="nav-actions">
-        <button type="button" class="view-button" id="openCabinPhotos">
-          VER FOTOS
-        </button>
+    
 
         <button class="mobile-nav-toggle" id="mobileNavToggle"
           aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
@@ -66,9 +64,8 @@
     <!-- Hero -->
     <section class="hero" id="hero">
       <!-- Si subís tu video, ponelo en: img/hero.mp4 -->
-      <video class="hero-video" autoplay muted loop playsinline poster="img/foto11.jpg">
+      <video class="hero-video" autoplay muted loop playsinline poster="img/foto1.jpg">
         <source src="img/hero.mp4" type="video/mp4" />
-        <!-- fallback online (si no tenés el video local todavía) -->
         <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-a-forest-covered-in-fog-6239/1080p.mp4" type="video/mp4" />
         Tu navegador no soporta video.
       </video>
@@ -111,104 +108,60 @@
         </div>
       </div>
     </section>
- <!-- Propiedades -->
-<section id="propiedades" aria-label="Cabañas disponibles">
-  <div class="container-wide">
-    <div class="section-header">
-      <h2>Nuestras cabañas</h2>
-      <p>Elegí una opción y mirá las fotos.</p>
-    </div>
 
-    <div class="properties-grid">
-      <!-- Cabaña 1 -->
-      <article class="property-card">
-        <img class="property-image" src="img/foto1.jpg" alt="Cabaña 1" loading="lazy" decoding="async" />
-        <div class="property-content">
-          <h3 class="property-title">Cabaña 1</h3>
-          <div class="property-location">Cabañas Sol y Luna</div>
-          <div class="property-features">🛏 2 dorm. · 🛁 1 baño · 👥 6 pers.</div>
-
-          <div class="property-price">
-            <button class="view-button" type="button" data-open-lightbox="c1">Ver Fotos</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Cabaña 2 -->
-      <article class="property-card">
-        <img class="property-image" src="img/foto5.jpg" alt="Cabaña 2" loading="lazy" decoding="async" />
-        <div class="property-content">
-          <h3 class="property-title">Cabaña 2</h3>
-          <div class="property-location">Cabañas Sol y Luna</div>
-          <div class="property-features">🛏 1 dorm. · 🛁 1 baño · 👥 4 pers.</div>
-
-          <div class="property-price">
-            <button class="view-button" type="button" data-open-lightbox="c2">Ver Fotos</button>
-          </div>
-        </div>
-      </article>
-
-      <!-- Cabaña 3 -->
-      <article class="property-card">
-        <img class="property-image" src="img/foto9.jpg" alt="Cabaña 3" loading="lazy" decoding="async" />
-        <div class="property-content">
-          <h3 class="property-title">Cabaña 3</h3>
-          <div class="property-location">Cabañas Sol y Luna</div>
-          <div class="property-features">🛏 3 dorm. · 🛁 2 baños · 👥 10 pers.</div>
-
-          <div class="property-price">
-            <button class="view-button" type="button" data-open-lightbox="c3">Ver Fotos</button>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- LIGHTBOX (Swiper) -->
-<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Galería de fotos">
-  <button class="close-lightbox" type="button" aria-label="Cerrar galería" id="closeLightboxBtn">✖</button>
-
-  <div class="swiper lightbox-swiper" id="lightboxSwiper">
-    <div class="swiper-wrapper" id="lightbox-swiper-wrapper"></div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev" aria-label="Anterior"></div>
-    <div class="swiper-button-next" aria-label="Siguiente"></div>
-  </div>
-</div>
-
-    <!-- Galería (Carrusel 1 por vez, sin franja) 
-    <section class="gallery-carousel-section" aria-label="Galería">
-      <div class="container">
+    <!-- Propiedades -->
+    <section id="propiedades" aria-label="Cabañas disponibles">
+      <div class="container-wide">
         <div class="section-header">
-          <h2>Galería</h2>
-          <p>Imágenes reales de Cabañas Sol y Luna.</p>
-        </div>
-      </div>
-
-      <div class="carousel-wrap" aria-label="Carrusel de fotos">
-        <button class="carousel-btn prev" type="button" aria-label="Foto anterior" data-carousel-prev>
-          <i class="fas fa-chevron-left"></i>
-        </button>
-
-        <div class="carousel" id="galleryCarousel" tabindex="0" aria-label="Galería desplazable">
-          <div class="carousel-track" id="galleryTrack">
-            <article class="carousel-slide"><img src="img/foto4.jpg" alt="Galería 1" loading="lazy" decoding="async" /></article>
-            <article class="carousel-slide"><img src="img/foto5.jpg" alt="Galería 2" loading="lazy" decoding="async" /></article>
-            <article class="carousel-slide"><img src="img/foto6.jpg" alt="Galería 3" loading="lazy" decoding="async" /></article>
-            <article class="carousel-slide"><img src="img/foto7.jpg" alt="Galería 4" loading="lazy" decoding="async" /></article>
-            <article class="carousel-slide"><img src="img/foto8.jpg" alt="Galería 5" loading="lazy" decoding="async" /></article>
-            <article class="carousel-slide"><img src="img/foto9.jpg" alt="Galería 6" loading="lazy" decoding="async" /></article>
-          </div>
+          <h2>Nuestras cabañas</h2>
+          <p>Elegí una opción y mirá las fotos.</p>
         </div>
 
-        <button class="carousel-btn next" type="button" aria-label="Foto siguiente" data-carousel-next>
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
+        <div class="properties-grid">
+          <!-- Cabaña 1 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto1.jpg" alt="Cabaña 1" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 1</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 2 dorm. · 🛁 1 baño · 👥 6 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c1">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
 
-      <div class="carousel-dots" id="galleryDots" aria-label="Indicadores del carrusel"></div>
-    </section>-->
+          <!-- Cabaña 2 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto5.jpg" alt="Cabaña 2" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 2</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 1 dorm. · 🛁 1 baño · 👥 4 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c2">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Cabaña 3 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto9.jpg" alt="Cabaña 3" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 3</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 3 dorm. · 🛁 2 baños · 👥 10 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c3">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <!-- ¿Por qué elegirnos? -->
     <section class="why" id="porque">
@@ -336,7 +289,6 @@
       </div>
     </section>
 
-   
     <!-- CTA final -->
     <section class="cta-final" id="contacto">
       <div class="cta-final-container">
@@ -376,6 +328,71 @@
       </div>
     </section>
   </main>
+<!-- Separador entre Video y Ubicación -->
+<div class="sep-dark" aria-hidden="true"></div>
+
+<!-- Video -->
+<section class="tour-video" aria-label="Video">
+  <div class="container">
+    <div class="section-header section-header--light">
+      <h2>Video</h2>
+      <p>Un vistazo rápido de Cabañas Sol y Luna.</p>
+    </div>
+
+    <div class="video-card">
+      <div class="video-frame">
+        <video id="tourVideo" class="tour-video-player" controls playsinline preload="metadata" poster="img/foto1.jpg">
+          <source src="/img/video1.mp4" type="video/mp4" />
+          Tu navegador no soporta video.
+        </video>
+
+      
+
+      <div class="video-note">Tip: tocá “play” para ver el recorrido.</div>
+    </div>
+  </div>
+</section>
+<div class="sep-dark" aria-hidden="true"></div>
+
+
+<!-- Ubicación -->
+<section class="location" aria-label="Ubicación">
+  <div class="container">
+    <div class="section-header section-header--light">
+      <h2>Ubicación</h2>
+      <p>Potrero de Garay, Córdoba.</p>
+    </div>
+
+    <div class="location-grid">
+      <div class="location-info">
+        <h3>Potrero de Garay, Córdoba</h3>
+        <p>
+          Estamos en <strong>Cabañas Sol y Luna</strong>. Coordiná tu llegada por WhatsApp y te pasamos referencias.
+        </p>
+
+        <ul class="location-list">
+          <li><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</li>
+          <li><i class="fas fa-phone"></i> +54 9 3512 692064</li>
+          <li><i class="fab fa-whatsapp"></i> WhatsApp: 5493512692064</li>
+        </ul>
+
+        <a class="btn-primary" href="https://wa.me/5493512692064" target="_blank" rel="noopener">
+          Consultar por WhatsApp
+        </a>
+      </div>
+
+      <div class="location-map" aria-label="Mapa">
+        <iframe
+          title="Mapa - Potrero de Garay, Córdoba"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          src="https://www.google.com/maps?q=Potrero%20de%20Garay%2C%20C%C3%B3rdoba&output=embed">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="footer">
@@ -443,23 +460,22 @@
   </div>
 
   <!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-<script>
-  /* =========================
-     CONFIG WHATSAPP + FECHAS
-     ========================= */
-  const WHATSAPP_NUMBER = "5493512692064";
+  <script>
+    /* =========================
+       CONFIG WHATSAPP + FECHAS
+       ========================= */
+    const WHATSAPP_NUMBER = "5493512692064";
 
-  function toISODate(d) {
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
+    function toISODate(d) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
 
-  const checkin = document.getElementById("checkin");
-  const checkout = document.getElementById("checkout");
+    const checkin = document.getElementById("checkin");
+    const checkout = document.getElementById("checkout");
 
-  if (checkin && checkout) {
     const today = new Date();
     const todayISO = toISODate(today);
 
@@ -468,31 +484,26 @@
 
     checkin.addEventListener("change", () => {
       if (!checkin.value) return;
-
       const inDate = new Date(checkin.value + "T00:00:00");
       const minOut = new Date(inDate);
       minOut.setDate(minOut.getDate() + 1);
       const minOutISO = toISODate(minOut);
-
       checkout.min = minOutISO;
 
       if (!checkout.value || checkout.value < minOutISO) {
         checkout.value = minOutISO;
       }
     });
-  }
 
-  /* =========================
-     FORM -> WhatsApp
-     ========================= */
-  const searchForm = document.getElementById("searchForm");
-  if (searchForm) {
-    searchForm.addEventListener("submit", (e) => {
+    /* =========================
+       FORM -> WhatsApp
+       ========================= */
+    document.getElementById("searchForm").addEventListener("submit", (e) => {
       e.preventDefault();
 
-      const guests = document.getElementById("guests")?.value || "";
-      const inVal = checkin?.value || "";
-      const outVal = checkout?.value || "";
+      const guests = document.getElementById("guests").value;
+      const inVal = checkin.value;
+      const outVal = checkout.value;
 
       const msg =
         `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
@@ -503,53 +514,50 @@
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank", "noopener");
     });
-  }
 
-  /* =========================
-     NAV MOBILE
-     ========================= */
-  const mobileNavToggle = document.getElementById("mobileNavToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
+    /* =========================
+       NAV MOBILE (FIX: en celular no se superpone el menú desktop)
+       ========================= */
+    const mobileNavToggle = document.getElementById("mobileNavToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-  function setMobileMenu(open) {
-    if (!mobileMenu || !mobileNavToggle) return;
-    mobileMenu.classList.toggle("active", open);
-    mobileMenu.setAttribute("aria-hidden", String(!open));
-    mobileNavToggle.setAttribute("aria-expanded", String(open));
-    document.body.classList.toggle("no-scroll", open);
-  }
+    function setMobileMenu(open) {
+      mobileMenu.classList.toggle("active", open);
+      mobileMenu.setAttribute("aria-hidden", String(!open));
+      mobileNavToggle.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("no-scroll", open);
+    }
 
-  if (mobileNavToggle) {
     mobileNavToggle.addEventListener("click", () => {
-      const open = !mobileMenu?.classList.contains("active");
+      const open = !mobileMenu.classList.contains("active");
       setMobileMenu(open);
     });
-  }
 
-  document.querySelectorAll(".mobile-link").forEach((a) => {
-    a.addEventListener("click", () => setMobileMenu(false));
-  });
+    document.querySelectorAll(".mobile-link").forEach(a => {
+      a.addEventListener("click", () => setMobileMenu(false));
+    });
 
-  /* =========================
-     SCROLL TOP
-     ========================= */
-  const scrollBtn = document.getElementById("scrollToTop");
-  if (scrollBtn) {
+    window.addEventListener("resize", () => {
+      // si vuelve a desktop, cerramos menú por las dudas
+      if (window.innerWidth >= 901) setMobileMenu(false);
+    });
+
+    /* =========================
+       SCROLL TOP
+       ========================= */
+    const scrollBtn = document.getElementById("scrollToTop");
     window.addEventListener("scroll", () => {
       scrollBtn.classList.toggle("visible", window.scrollY > 600);
     });
     scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-  }
 
-  /* =========================
-     COUNTERS (Calificaciones)
-     ========================= */
-  const counters = document.querySelectorAll(".counter");
-  if (counters.length) {
+    /* =========================
+       COUNTERS (Calificaciones)
+       ========================= */
+    const counters = document.querySelectorAll(".counter");
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-
         const el = entry.target;
         const target = parseFloat(el.dataset.target || "0");
         const decimals = parseInt(el.dataset.decimals || "0", 10);
@@ -562,119 +570,169 @@
           el.textContent = val.toFixed(decimals);
           if (p < 1) requestAnimationFrame(tick);
         }
-
         requestAnimationFrame(tick);
         counterObserver.unobserve(el);
       });
     }, { threshold: 0.35 });
 
-    counters.forEach((c) => counterObserver.observe(c));
-  }
+    counters.forEach(c => counterObserver.observe(c));
 
-  /* ==========================================================
-     (IMPORTANTE) GALERÍA CARRUSEL: ELIMINADO DEL JS
-     - Podés dejar la sección de Galería comentada sin que rompa
-     ========================================================== */
+    /* =========================
+       LIGHTBOX CABAÑAS (Swiper) - FIX OK
+       ========================= */
+    const cabinImages = {
+      c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
+      c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
+      c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"]
+    };
 
-  /* =========================
-     LIGHTBOX CABAÑAS (Swiper)
-     ========================= */
-  const cabinImages = {
-    c1: ["img/foto1.jpg", "img/foto2.jpg", "img/foto3.jpg", "img/foto4.jpg"],
-    c2: ["img/foto5.jpg", "img/foto6.jpg", "img/foto7.jpg", "img/foto8.jpg"],
-    c3: ["img/foto9.jpg", "img/foto10.jpg", "img/foto11.jpg", "img/foto12.jpg"]
-  };
+    let lightboxSwiper = null;
 
-  let lightboxSwiper = null;
+    function openLightbox(cabinKey) {
+      const key = cabinKey && cabinImages[cabinKey] ? cabinKey : "c1";
+      const lb = document.getElementById("lightbox");
+      const wrapper = document.getElementById("lightbox-swiper-wrapper");
+      wrapper.innerHTML = "";
 
-  function openLightbox(cabinKey) {
-    const key = cabinKey && cabinImages[cabinKey] ? cabinKey : "c1";
+      cabinImages[key].forEach((src, idx) => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
+          <img
+            src="${src}"
+            alt="Foto ${idx + 1}"
+            loading="eager"
+            decoding="async"
+            onerror="this.onerror=null;this.src='img/foto1.jpg';"
+          />
+        `;
+        wrapper.appendChild(slide);
+      });
 
-    const lb = document.getElementById("lightbox");
-    const wrapper = document.getElementById("lightbox-swiper-wrapper");
-    if (!lb || !wrapper) return;
+      lb.classList.add("active");
+      lb.setAttribute("aria-hidden", "false");
+      document.body.classList.add("no-scroll");
 
-    wrapper.innerHTML = "";
+      if (lightboxSwiper) {
+        lightboxSwiper.destroy(true, true);
+        lightboxSwiper = null;
+      }
 
-    cabinImages[key].forEach((src, idx) => {
-      const slide = document.createElement("div");
-      slide.className = "swiper-slide";
-      slide.innerHTML = `
-        <img
-          src="${src}"
-          alt="Foto ${idx + 1}"
-          loading="eager"
-          decoding="async"
-          onerror="this.onerror=null;this.src='img/foto1.jpg';"
-        />
-      `;
-      wrapper.appendChild(slide);
-    });
+      const el = document.getElementById("lightboxSwiper");
+      lightboxSwiper = new Swiper(el, {
+        loop: false,
+        rewind: true,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        preloadImages: true,
+        watchOverflow: true,
+        observer: true,
+        observeParents: true,
+        pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
+        navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
+        keyboard: { enabled: true }
+      });
 
-    lb.classList.add("active");
-    lb.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
-
-    if (lightboxSwiper) {
-      lightboxSwiper.destroy(true, true);
-      lightboxSwiper = null;
+      requestAnimationFrame(() => lightboxSwiper.update());
     }
 
-    const el = document.getElementById("lightboxSwiper");
-    lightboxSwiper = new Swiper(el, {
-      loop: false,
-      rewind: true,
-      slidesPerView: 1,
-      spaceBetween: 16,
-      preloadImages: true,
-      watchOverflow: true,
-      observer: true,
-      observeParents: true,
-      pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
-      navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
-      keyboard: { enabled: true }
+    function closeLightbox() {
+      const lb = document.getElementById("lightbox");
+      lb.classList.remove("active");
+      lb.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("no-scroll");
+
+      if (lightboxSwiper) {
+        lightboxSwiper.destroy(true, true);
+        lightboxSwiper = null;
+      }
+    }
+
+    // Botones por cabaña
+    document.querySelectorAll("[data-open-lightbox]").forEach(btn => {
+      btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
     });
 
-    requestAnimationFrame(() => lightboxSwiper.update());
-  }
+    // Botón header
+    document.getElementById("openCabinPhotos").addEventListener("click", () => openLightbox("c1"));
 
-  function closeLightbox() {
-    const lb = document.getElementById("lightbox");
-    if (!lb) return;
-
-    lb.classList.remove("active");
-    lb.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("no-scroll");
-
-    if (lightboxSwiper) {
-      lightboxSwiper.destroy(true, true);
-      lightboxSwiper = null;
-    }
-  }
-
-  // Botones "Ver Fotos" de cada cabaña
-  document.querySelectorAll("[data-open-lightbox]").forEach((btn) => {
-    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
-  });
-
-  // Botón VER FOTOS del header
-  const openCabinPhotosBtn = document.getElementById("openCabinPhotos");
-  if (openCabinPhotosBtn) {
-    openCabinPhotosBtn.addEventListener("click", () => openLightbox("c1"));
-  }
-
-  // Cerrar lightbox
-  const closeBtn = document.getElementById("closeLightboxBtn");
-  if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
-
-  const lbRoot = document.getElementById("lightbox");
-  if (lbRoot) {
-    lbRoot.addEventListener("click", (e) => {
+    // Cerrar
+    document.getElementById("closeLightboxBtn").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox").addEventListener("click", (e) => {
       if (e.target.id === "lightbox") closeLightbox();
     });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLightbox();
+    });
+    /* =========================
+   CAROUSEL (solo si existe en el DOM)
+   ========================= */
+(() => {
+  const track = document.getElementById("galleryTrack");
+  const dotsWrap = document.getElementById("galleryDots");
+  const prevBtn = document.querySelector("[data-carousel-prev]");
+  const nextBtn = document.querySelector("[data-carousel-next]");
+
+  // Si la galería está comentada o no existe, NO inicializamos nada
+  if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+
+  function buildDots() {
+    dotsWrap.innerHTML = "";
+    slides.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.className = "carousel-dot" + (i === 0 ? " active" : "");
+      b.type = "button";
+      b.setAttribute("aria-label", `Ir a foto ${i + 1}`);
+      b.addEventListener("click", () => {
+        track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+      });
+      dotsWrap.appendChild(b);
+    });
   }
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightbox();
+  function setActiveDot() {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    const dots = dotsWrap.querySelectorAll(".carousel-dot");
+    dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+  }
+
+  buildDots();
+  track.addEventListener("scroll", () => requestAnimationFrame(setActiveDot));
+
+  prevBtn.addEventListener("click", () => {
+    track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
   });
-</script>
+  nextBtn.addEventListener("click", () => {
+    track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+  });
+
+  window.addEventListener("resize", () => {
+    buildDots();
+    setActiveDot();
+  });
+})();
+/* =========================
+   VIDEO PLAY OVERLAY (tipo YouTube)
+   ========================= */
+(() => {
+  const v = document.getElementById("tourVideo");
+  const btn = document.querySelector(".video-play-btn");
+  if (!v || !btn) return;
+
+  const sync = () => btn.classList.toggle("hidden", !v.paused);
+  sync();
+
+  btn.addEventListener("click", async () => {
+    try { await v.play(); } catch (e) {}
+  });
+
+  v.addEventListener("play", sync);
+  v.addEventListener("pause", sync);
+  v.addEventListener("ended", sync);
+})();
+
+  </script>
+</body>
+</html>
