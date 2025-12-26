@@ -790,6 +790,73 @@ button{ font: inherit; }
 .lightbox .swiper-pagination-bullet-active{
   background: #ffffff;
 }
+/* ===== LIGHTBOX: FIX cierre en celular ===== */
+.lightbox{
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+}
+
+/* aseguramos que el swiper quede debajo del botón */
+.lightbox .lightbox-swiper{
+  position: relative;
+  z-index: 1;
+}
+
+.close-lightbox{
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 10000;
+
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+  pointer-events: auto;        /* clave */
+  touch-action: manipulation;  /* clave */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.close-lightbox:active{
+  transform: scale(0.98);
+}
+.close-lightbox-bottom{
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 9999;
+
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  font-weight: 700;
+}
+@media (min-width: 901px){
+  .close-lightbox-bottom{ display:none; }
+}
+
+/* Asegura que Swiper no tape el botón */
+.lightbox .swiper,
+.lightbox .swiper-wrapper,
+.lightbox .swiper-slide{
+  z-index: 1;
+}
 
 /* =========================
    RESPONSIVE
