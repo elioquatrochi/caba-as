@@ -83,7 +83,7 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const form = $("#searchForm");
   if (!form) return;
 
-  const PHONE = "5493546574999"; // cambiá si querés
+  const PHONE = "5493512692064"; // cambiá si querés
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -267,4 +267,85 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   track.addEventListener("touchstart", (e) => onDown(e.touches[0].clientX), { passive: true });
   track.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX), { passive: true });
   track.addEventListener("touchend", onUp);
+})();
+(() => {
+  const photosByCabin = {
+    c1: [
+      "/img/foto1",
+      "foto2",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop"
+    ],
+    c2: [
+      "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1200&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1200&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&h=800&fit=crop"
+    ],
+    c3: [
+      "https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1200&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200&h=800&fit=crop",
+      "https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1200&h=800&fit=crop"
+    ]
+  };
+
+  const createLightbox = () => {
+    const lightbox = document.createElement("div");
+    lightbox.className = "gallery-lightbox";
+    lightbox.innerHTML = `
+      <span class="lightbox-close">&times;</span>
+      <img src="" alt="Foto de cabaña" />
+      <div class="lightbox-controls">
+        <button class="lightbox-btn" id="prevPhoto">Anterior</button>
+        <button class="lightbox-btn" id="nextPhoto">Siguiente</button>
+      </div>
+    `;
+    document.body.appendChild(lightbox);
+    return lightbox;
+  };
+
+  const lightbox = createLightbox();
+  const lightboxImg = lightbox.querySelector("img");
+  const closeBtn = lightbox.querySelector(".lightbox-close");
+  const prevBtn = lightbox.querySelector("#prevPhoto");
+  const nextBtn = lightbox.querySelector("#nextPhoto");
+
+  let currentPhotos = [];
+  let currentIndex = 0;
+
+  const showPhoto = (index) => {
+    currentIndex = index;
+    lightboxImg.src = currentPhotos[currentIndex];
+  };
+
+  $$(".js-view-photos").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cabinId = btn.dataset.cabin;
+      currentPhotos = photosByCabin[cabinId] || [];
+      if (currentPhotos.length) {
+        showPhoto(0);
+        lightbox.classList.add("active");
+      }
+    });
+  });
+
+  closeBtn.addEventListener("click", () => lightbox.classList.remove("active"));
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightbox.classList.remove("active");
+  });
+
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + currentPhotos.length) % currentPhotos.length;
+    showPhoto(currentIndex);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % currentPhotos.length;
+    showPhoto(currentIndex);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lightbox.classList.contains("active")) return;
+    if (e.key === "ArrowRight") nextBtn.click();
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "Escape") lightbox.classList.remove("active");
+  });
 })();
