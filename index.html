@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Cabañas Sol y Luna en La Cumbrecita, Córdoba. Consultá disponibilidad y reservá tu estadía con atención personalizada." />
-  <title>Cabañas Sol y Luna | Potrero de Garay, Córdoba</title>
+  <meta name="description" content="Cabañas Sol y Luna. Consultá disponibilidad y reservá tu estadía con atención personalizada." />
+  <title>Cabañas Sol y Luna</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,6 +14,9 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
+  <!-- Swiper CSS (Lightbox) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <!-- CSS -->
   <link rel="stylesheet" href="css.css" />
 </head>
@@ -22,24 +25,20 @@
   <!-- Header -->
   <header class="header" id="header">
     <nav class="nav" aria-label="Navegación principal">
-      <!-- Logo (imagen) -->
-      <a href="#" class="logo" aria-label="Inicio Cabañas Sol y Luna">
-        <!-- Usá PNG si querés: img/logo-solyluna.png -->
+      <a href="#hero" class="logo" aria-label="Inicio Cabañas Sol y Luna">
         <img src="img/logo-solyluna.svg" alt="Cabañas Sol y Luna" />
       </a>
 
+      <!-- Desktop links -->
       <ul class="nav-links" id="navLinks">
         <li><a href="#propiedades">Cabañas</a></li>
         <li><a href="#porque">¿Por qué elegirnos?</a></li>
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#calificaciones">Calificaciones</a></li>
         <li><a href="#contacto">Contacto</a></li>
-        <li><a href="#ubicacion">Ubicación</a></li>
-
       </ul>
 
-      <div class="nav-actions">
-        <a href="#buscador" class="cta-button">Consultar disponibilidad</a>
+    
 
         <button class="mobile-nav-toggle" id="mobileNavToggle"
           aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
@@ -64,15 +63,16 @@
   <main>
     <!-- Hero -->
     <section class="hero" id="hero">
-      <video class="hero-video" autoplay muted loop playsinline
-        poster="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop">
+      <!-- Si subís tu video, ponelo en: img/hero.mp4 -->
+      <video class="hero-video" autoplay muted loop playsinline poster="img/foto1.jpg">
+        <source src="img/hero.mp4" type="video/mp4" />
         <source src="https://cdn.coverr.co/videos/coverr-aerial-view-of-a-forest-covered-in-fog-6239/1080p.mp4" type="video/mp4" />
         Tu navegador no soporta video.
       </video>
 
       <div class="hero-content">
-        <h1>Tu escapada a las sierras te está esperando</h1>
-        <p>La Cumbrecita, Córdoba: naturaleza, tranquilidad y cabañas pensadas para que descanses de verdad.</p>
+        <h1>Tu descanso en Cabañas Sol y Luna</h1>
+        <p>Atención personalizada, comodidad y un lugar pensado para disfrutar de verdad.</p>
 
         <div class="search-box" id="buscador">
           <form class="search-form" id="searchForm" aria-label="Consultar disponibilidad">
@@ -99,17 +99,7 @@
               </select>
             </div>
 
-            <div class="search-group">
-              <label for="cabana">Cabaña</label>
-              <select id="cabana" name="cabana">
-                <option value="">Cualquiera</option>
-                <option value="c1">Cabaña 1</option>
-                <option value="c2">Cabaña 2</option>
-                <option value="c3">Cabaña 3</option>
-              </select>
-            </div>
-
-            <button type="submit" class="search-submit">Consultar por WhatsApp</button>
+            <button type="submit" class="search-submit">CONSULTAR DISPONIBILIDAD</button>
 
             <p class="search-hint">
               Al enviar, se arma un mensaje para WhatsApp con tu consulta. La reserva se confirma cuando te respondamos.
@@ -119,113 +109,107 @@
       </div>
     </section>
 
-    <!-- Galería (CARRUSEL FULL WIDTH) -->
-    <section class="gallery-carousel-section" aria-label="Galería">
-      <div class="container">
+    <!-- Propiedades -->
+    <section id="propiedades" aria-label="Cabañas disponibles">
+      <div class="container-wide">
         <div class="section-header">
-          <h2>Un lugar para desconectar</h2>
-          <p>Fotos del complejo y alrededores. Aire puro, río y sierras.</p>
-        </div>
-      </div>
-
-      <div class="carousel-wrap" aria-label="Carrusel de fotos">
-        <button class="carousel-btn prev" type="button" aria-label="Foto anterior" data-carousel-prev>
-          <i class="fas fa-chevron-left"></i>
-        </button>
-
-        <div class="carousel" id="galleryCarousel" tabindex="0" aria-label="Galería desplazable">
-          <div class="carousel-track" id="galleryTrack">
-            <!-- Reemplazá por tus imágenes /assets -->
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1600&h=900&fit=crop" alt="Cabaña al atardecer" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1600&h=900&fit=crop" alt="Interior cálido" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop" alt="Sierras y amanecer" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1600&h=900&fit=crop" alt="Galería con vista" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1600&h=900&fit=crop" alt="Relax y descanso" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&h=900&fit=crop" alt="Paisajes y actividades" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&h=900&fit=crop" alt="Espacios comunes" loading="lazy" decoding="async" />
-            </article>
-            <article class="carousel-slide">
-              <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&h=900&fit=crop" alt="Dormitorio" loading="lazy" decoding="async" />
-            </article>
-          </div>
+          <h2>Nuestras cabañas</h2>
+          <p>Elegí una opción y mirá las fotos.</p>
         </div>
 
-        <button class="carousel-btn next" type="button" aria-label="Foto siguiente" data-carousel-next>
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
+        <div class="properties-grid">
+          <!-- Cabaña 1 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto1.jpg" alt="Cabaña 1" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 1</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 2 dorm. · 🛁 1 baño · 👥 6 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c1">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
 
-      <div class="carousel-dots" id="galleryDots" aria-label="Indicadores del carrusel"></div>
+          <!-- Cabaña 2 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto5.jpg" alt="Cabaña 2" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 2</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 1 dorm. · 🛁 1 baño · 👥 4 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c2">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Cabaña 3 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto9.jpg" alt="Cabaña 3" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 3</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 3 dorm. · 🛁 2 baños · 👥 10 pers.</div>
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+                <button class="view-button" type="button" data-open-lightbox="c3">Ver Fotos</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <!-- ¿Por qué elegirnos? (más ancho) -->
+    <!-- ¿Por qué elegirnos? -->
     <section class="why" id="porque">
       <div class="container-wide">
         <div class="why-grid">
           <div class="why-collage" aria-label="Fotos del complejo">
             <figure class="collage-item collage-item--big">
-              <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&h=900&fit=crop"
-                   alt="Imagen principal del complejo" loading="lazy" decoding="async">
+              <img src="img/foto10.jpg" alt="Foto principal" loading="lazy" decoding="async">
             </figure>
-
             <figure class="collage-item collage-item--small1">
-              <img src="https://images.unsplash.com/photo-1505692952047-1a78307da8f2?w=900&h=700&fit=crop"
-                   alt="Interior de cabaña" loading="lazy" decoding="async">
+              <img src="img/foto11.jpg" alt="Foto 2" loading="lazy" decoding="async">
             </figure>
-
             <figure class="collage-item collage-item--small2">
-              <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=900&h=700&fit=crop"
-                   alt="Vista y entorno" loading="lazy" decoding="async">
+              <img src="img/foto12.jpg" alt="Foto 3" loading="lazy" decoding="async">
             </figure>
-
             <figure class="collage-item collage-item--small3">
-              <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&h=700&fit=crop"
-                   alt="Relax en el complejo" loading="lazy" decoding="async">
+              <img src="img/foto13.jpg" alt="Foto 4" loading="lazy" decoding="async">
             </figure>
           </div>
 
           <div class="why-content">
             <h2>¿Por qué elegirnos?</h2>
             <p class="why-lead">
-              Estamos en <strong>La Cumbrecita, Córdoba</strong>: un pueblo con impronta alpina, naturaleza y tranquilidad.
-              Nuestras cabañas están pensadas para que descanses de verdad.
+              <strong>Cabañas Sol y Luna</strong> es un espacio pensado para descansar y disfrutar con total comodidad.
             </p>
 
             <div class="why-cards">
               <article class="why-card">
-                <div class="why-icon"><i class="fas fa-location-dot"></i></div>
-                <div>
-                  <h3>Ubicación privilegiada</h3>
-                  <p>A metros del centro, cerca de todo y a la vez en un entorno natural, silencioso y único.</p>
-                </div>
-              </article>
-
-              <article class="why-card">
                 <div class="why-icon"><i class="fas fa-house"></i></div>
                 <div>
-                  <h3>Cabañas equipadas</h3>
-                  <p>Unidades para 2 a 12 personas, con cocina, calefacción, Wi-Fi y detalles pensados para tu comodidad.</p>
+                  <h3>Comodidad real</h3>
+                  <p>Ambientes amplios, equipamiento completo y una experiencia simple, sin vueltas.</p>
                 </div>
               </article>
 
               <article class="why-card">
-                <div class="why-icon"><i class="fas fa-tree"></i></div>
+                <div class="why-icon"><i class="fas fa-wifi"></i></div>
                 <div>
-                  <h3>Entorno mágico</h3>
-                  <p>Predio con bajada al río, parque y una vista impresionante a las Sierras de Córdoba.</p>
+                  <h3>Servicios incluidos</h3>
+                  <p>Wi-Fi, cocina equipada y detalles que hacen la diferencia en una estadía cómoda.</p>
+                </div>
+              </article>
+
+              <article class="why-card">
+                <div class="why-icon"><i class="fas fa-heart"></i></div>
+                <div>
+                  <h3>Atención personalizada</h3>
+                  <p>Respondemos rápido por WhatsApp y te ayudamos a elegir la mejor opción.</p>
                 </div>
               </article>
             </div>
@@ -239,205 +223,94 @@
       </div>
     </section>
 
-    <!-- Servicios (ARRIBA) -->
+    <!-- Servicios -->
     <section class="services" id="servicios" aria-label="Servicios">
       <div class="container">
         <div class="section-header">
           <h2>Servicios</h2>
-          <p>Todo lo necesario para una estadía cómoda, en familia o con amigos.</p>
+          <p>Todo lo necesario para una estadía cómoda.</p>
         </div>
 
         <div class="services-grid">
           <ul class="services-list">
-            <li><i class="fas fa-wifi"></i> Wi-Fi dentro del complejo</li>
-            <li><i class="fas fa-tv"></i> TV satelital</li>
-            <li><i class="fas fa-fire"></i> Calefacción / salamandra en algunas unidades</li>
-            <li><i class="fas fa-kitchen-set"></i> Cocina equipada, vajilla completa</li>
+            <li><i class="fas fa-wifi"></i> Wi-Fi</li>
+            <li><i class="fas fa-tv"></i> TV</li>
+            <li><i class="fas fa-fire"></i> Calefacción / salamandra (según unidad)</li>
+            <li><i class="fas fa-kitchen-set"></i> Cocina equipada</li>
             <li><i class="fas fa-microwave"></i> Microondas</li>
-            <li><i class="fas fa-bed"></i> Ropa blanca y recambio</li>
+            <li><i class="fas fa-bed"></i> Ropa blanca (consultar)</li>
           </ul>
 
           <ul class="services-list">
-            <li><i class="fas fa-car"></i> Cocheras techadas cerca de las unidades</li>
-            <li><i class="fas fa-baby"></i> Cunas (consultar disponibilidad)</li>
-            <li><i class="fas fa-water"></i> Salida / acceso al río</li>
-            <li><i class="fas fa-umbrella-beach"></i> Reposeras y sombrillas</li>
-            <li><i class="fas fa-mountain"></i> Vista a las sierras</li>
-            <li><i class="fas fa-fire-burner"></i> Asadores individuales (según unidad)</li>
+            <li><i class="fas fa-car"></i> Cochera (según disponibilidad)</li>
+            <li><i class="fas fa-baby"></i> Cunas (consultar)</li>
+            <li><i class="fas fa-umbrella-beach"></i> Reposeras</li>
+            <li><i class="fas fa-fire-burner"></i> Asador (según unidad)</li>
+            <li><i class="fas fa-sparkles"></i> Limpieza (consultar)</li>
+            <li><i class="fas fa-star"></i> Atención personalizada</li>
           </ul>
         </div>
-
-        <p class="services-note">
-          Importante: en épocas de riesgo ígneo, es obligación apagar el fuego (con arena o agua) al finalizar el uso del asador.
-        </p>
       </div>
     </section>
 
-    <!-- Calificaciones (DEBAJO de Servicios) -->
+    <!-- Calificaciones -->
     <section class="ratings" id="calificaciones" aria-label="Calificaciones">
       <div class="container">
         <div class="section-header">
           <h2>Calificaciones</h2>
-          <p>Opiniones reales de huéspedes en distintas plataformas.</p>
+          <p>Opiniones de huéspedes.</p>
         </div>
 
         <div class="ratings-grid">
           <div class="rating-item">
             <div class="rating-badge rating-badge--blue" aria-hidden="true">
-              <i class="fas fa-clock"></i>
+              <i class="fas fa-star"></i>
             </div>
             <div class="rating-number counter" data-target="9.0" data-decimals="1">0.0</div>
-            <div class="rating-label">“Fantástico” (Booking)</div>
+            <div class="rating-label">Excelente</div>
           </div>
 
           <div class="rating-item">
             <div class="rating-badge rating-badge--green" aria-hidden="true">
-              <i class="fas fa-clock"></i>
+              <i class="fas fa-star"></i>
             </div>
             <div class="rating-number counter" data-target="4.7" data-decimals="1">0.0</div>
-            <div class="rating-label">“Excelente” (Tripadvisor)</div>
+            <div class="rating-label">Muy bueno</div>
           </div>
 
           <div class="rating-item">
             <div class="rating-badge rating-badge--orange" aria-hidden="true">
-              <i class="fas fa-clock"></i>
+              <i class="fas fa-star"></i>
             </div>
             <div class="rating-number counter" data-target="4.5" data-decimals="1">0.0</div>
-            <div class="rating-label">“Muy buena” (Google)</div>
+            <div class="rating-label">Recomendado</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Propiedades (más ancho + cards más grandes) -->
-    <section id="propiedades" aria-label="Cabañas disponibles">
-      <div class="container-wide">
-        <div class="section-header">
-          <h2>Nuestras cabañas</h2>
-          <p>Opciones para parejas, familias y grupos. Consultá disponibilidad por fecha.</p>
-        </div>
-
-        <div class="properties-grid">
-          <article class="property-card">
-            <img src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=1200&h=800&fit=crop" alt="Cabaña 1" class="property-image" loading="lazy" decoding="async" />
-            <div class="property-content">
-              <h3 class="property-title">Cabaña 1</h3>
-              <p class="property-location"><i class="fas fa-location-dot"></i> La Cumbrecita, Córdoba</p>
-              <div class="property-features">
-                <span><i class="fas fa-bed"></i> 2 dorm.</span>
-                <span><i class="fas fa-bath"></i> 1 baño</span>
-                <span><i class="fas fa-users"></i> 6 pers.</span>
-              </div>
-              <div class="property-price">
-                <div>
-                  <span class="price-amount">Consultar</span>
-                  <span class="price-period">/noche</span>
-                </div>
-                <a href="#buscador" class="view-button">Consultar</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="property-card">
-            <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=1200&h=800&fit=crop" alt="Cabaña 2" class="property-image" loading="lazy" decoding="async" />
-            <div class="property-content">
-              <h3 class="property-title">Cabaña 2</h3>
-              <p class="property-location"><i class="fas fa-location-dot"></i> La Cumbrecita, Córdoba</p>
-              <div class="property-features">
-                <span><i class="fas fa-bed"></i> 1 dorm.</span>
-                <span><i class="fas fa-bath"></i> 1 baño</span>
-                <span><i class="fas fa-users"></i> 4 pers.</span>
-              </div>
-              <div class="property-price">
-                <div>
-                  <span class="price-amount">Consultar</span>
-                  <span class="price-period">/noche</span>
-                </div>
-                <a href="#buscador" class="view-button">Consultar</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="property-card">
-            <img src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=1200&h=800&fit=crop" alt="Cabaña 3" class="property-image" loading="lazy" decoding="async" />
-            <div class="property-content">
-              <h3 class="property-title">Cabaña 3</h3>
-              <p class="property-location"><i class="fas fa-location-dot"></i> La Cumbrecita, Córdoba</p>
-              <div class="property-features">
-                <span><i class="fas fa-bed"></i> 3 dorm.</span>
-                <span><i class="fas fa-bath"></i> 2 baños</span>
-                <span><i class="fas fa-users"></i> 10 pers.</span>
-              </div>
-              <div class="property-price">
-                <div>
-                  <span class="price-amount">Consultar</span>
-                  <span class="price-period">/noche</span>
-                </div>
-                <a href="#buscador" class="view-button">Consultar</a>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-<!-- Ubicación (MAPA) -->
-<section class="map-section" id="ubicacion" aria-label="Ubicación">
-  <div class="container">
-    <div class="section-header">
-      <h2>Ubicación</h2>
-      <p>Estamos en Potrero de Garay, Córdoba. Mirá el mapa y llegá fácil.</p>
-    </div>
-  </div>
-
-  <div class="map-card map-card--full">
-    <div class="map-embed" role="application" aria-label="Mapa de Google: Potrero de Garay, Córdoba">
-      <iframe
-        title="Mapa - Potrero de Garay, Córdoba"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=Potrero%20de%20Garay%2C%20C%C3%B3rdoba&output=embed">
-      </iframe>
-    </div>
-
-    <div class="map-actions container">
-      <a class="btn-primary" target="_blank" rel="noopener"
-         href="https://www.google.com/maps/search/?api=1&query=Potrero%20de%20Garay%2C%20C%C3%B3rdoba">
-        <i class="fas fa-map-location-dot"></i>&nbsp;Abrir en Google Maps
-      </a>
-
-      <a class="btn-outline" href="#buscador">
-        <i class="fas fa-calendar-check"></i>&nbsp;Consultar disponibilidad
-      </a>
-    </div>
-  </div>
-</section>
-
-
-    <!-- CTA final (sección negra) -->
+    <!-- CTA final -->
     <section class="cta-final" id="contacto">
       <div class="cta-final-container">
         <div class="cta-final-text">
-          <h2>¿Listo para reservar?</h2>
-          <p>
-            Escribinos por WhatsApp y te respondemos con disponibilidad,
-            tarifas y opciones de unidad.
-          </p>
+          <h2>¿Querés consultar?</h2>
+          <p>Escribinos por WhatsApp y te respondemos con disponibilidad y opciones.</p>
 
           <div class="cta-final-actions">
-            <a href="https://wa.me/5493546574999" target="_blank" class="cta-wsp" rel="noopener">
+            <a href="https://wa.me/5493512692064" target="_blank" class="cta-wsp" rel="noopener">
               <i class="fab fa-whatsapp"></i>
-              Consultar por WhatsApp
+              WhatsApp
             </a>
 
             <a href="#buscador" class="cta-form">
               <i class="fas fa-calendar-check"></i>
-              Ir al formulario
+              Consultar disponibilidad
             </a>
           </div>
 
           <div class="cta-final-extra">
             <span><strong>Horario:</strong> 09:00 a 20:00</span><br />
-            <span><strong>Ubicación:</strong> Potrero de Garay, Córdoba</span>
+            <span><strong>Cabañas Sol y Luna</strong></span>
           </div>
         </div>
 
@@ -445,25 +318,88 @@
           <h4>Datos</h4>
 
           <ul>
-            <li><i class="fas fa-phone"></i> +54 9 3546 57-1111</li>
+            <li><i class="fas fa-phone"></i> +54 9 3512 692064</li>
             <li><i class="fas fa-envelope"></i> reservas@tus-cabanas.com</li>
-            <li><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</li>
+            <li><i class="fas fa-location-dot"></i> Cabañas Sol y Luna</li>
           </ul>
 
-          <p class="cta-tip">
-            Tip: también podés enviar fecha + cantidad de personas y te pasamos opciones.
-          </p>
+          <p class="cta-tip">Tip: enviá fecha + cantidad de personas y te pasamos opciones.</p>
         </div>
       </div>
     </section>
   </main>
+<!-- Separador entre Video y Ubicación -->
+<div class="sep-dark" aria-hidden="true"></div>
+
+<!-- Video -->
+<section class="tour-video" aria-label="Video">
+  <div class="container">
+    <div class="section-header section-header--light">
+      <h2>Video</h2>
+      <p>Un vistazo rápido de Cabañas Sol y Luna.</p>
+    </div>
+
+    <div class="video-card">
+      <div class="video-frame">
+        <video id="tourVideo" class="tour-video-player" controls playsinline preload="metadata" poster="img/foto1.jpg">
+          <source src="/img/video1.mp4" type="video/mp4" />
+          Tu navegador no soporta video.
+        </video>
+
+      
+
+      <div class="video-note">Tip: tocá “play” para ver el recorrido.</div>
+    </div>
+  </div>
+</section>
+<div class="sep-dark" aria-hidden="true"></div>
+
+
+<!-- Ubicación -->
+<section class="location" aria-label="Ubicación">
+  <div class="container">
+    <div class="section-header section-header--light">
+      <h2>Ubicación</h2>
+      <p>Potrero de Garay, Córdoba.</p>
+    </div>
+
+    <div class="location-grid">
+      <div class="location-info">
+        <h3>Potrero de Garay, Córdoba</h3>
+        <p>
+          Estamos en <strong>Cabañas Sol y Luna</strong>. Coordiná tu llegada por WhatsApp y te pasamos referencias.
+        </p>
+
+        <ul class="location-list">
+          <li><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</li>
+          <li><i class="fas fa-phone"></i> +54 9 3512 692064</li>
+          <li><i class="fab fa-whatsapp"></i> WhatsApp: 5493512692064</li>
+        </ul>
+
+        <a class="btn-primary" href="https://wa.me/5493512692064" target="_blank" rel="noopener">
+          Consultar por WhatsApp
+        </a>
+      </div>
+
+      <div class="location-map" aria-label="Mapa">
+        <iframe
+          title="Mapa - Potrero de Garay, Córdoba"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          src="https://www.google.com/maps?q=Potrero%20de%20Garay%2C%20C%C3%B3rdoba&output=embed">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-content container">
       <div class="footer-section">
         <h3>Cabañas Sol y Luna</h3>
-        <p>Atención personalizada todo el año. Consultá por fechas, tarifas y promos.</p>
+        <p>Atención personalizada todo el año. Consultá por fechas y promos.</p>
       </div>
 
       <div class="footer-section">
@@ -479,21 +415,17 @@
       <div class="footer-section">
         <h3>Contacto</h3>
         <ul class="footer-links">
-          <li><a href="tel:+5493546574999"><i class="fas fa-phone"></i> +54 9 3546 57-1111</a></li>
+          <li><a href="tel:+5493512692064"><i class="fas fa-phone"></i> +54 9 3512 692064</a></li>
           <li><a href="mailto:reservas@tus-cabanas.com"><i class="fas fa-envelope"></i> reservas@tus-cabanas.com</a></li>
-          <li><span><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</span></li>
+          <li><span><i class="fas fa-location-dot"></i> Cabañas Sol y Luna</span></li>
         </ul>
       </div>
 
       <div class="footer-section">
         <h3>Redes</h3>
         <ul class="footer-links">
-          <li class="social">
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i> Instagram</a>
-          </li>
-          <li class="social">
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
-          </li>
+          <li class="social"><a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i> Instagram</a></li>
+          <li class="social"><a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i> Facebook</a></li>
         </ul>
       </div>
     </div>
@@ -510,11 +442,297 @@
 
   <!-- WhatsApp flotante -->
   <a class="wsp-float" id="wspFloat"
-     href="https://wa.me/5493546574999" target="_blank"
+     href="https://wa.me/5493512692064" target="_blank"
      aria-label="Abrir WhatsApp para consultar" rel="noopener">
     <i class="fab fa-whatsapp"></i>
   </a>
 
-  <script src="js.js"></script>
+  <!-- LIGHTBOX (Swiper) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Galería de fotos">
+    <button class="close-lightbox" type="button" aria-label="Cerrar galería" id="closeLightboxBtn">✖</button>
+
+    <div class="swiper lightbox-swiper" id="lightboxSwiper">
+      <div class="swiper-wrapper" id="lightbox-swiper-wrapper"></div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev" aria-label="Anterior"></div>
+      <div class="swiper-button-next" aria-label="Siguiente"></div>
+    </div>
+  </div>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    /* =========================
+       CONFIG WHATSAPP + FECHAS
+       ========================= */
+    const WHATSAPP_NUMBER = "5493512692064";
+
+    function toISODate(d) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+
+    const checkin = document.getElementById("checkin");
+    const checkout = document.getElementById("checkout");
+
+    const today = new Date();
+    const todayISO = toISODate(today);
+
+    checkin.min = todayISO;
+    checkout.min = todayISO;
+
+    checkin.addEventListener("change", () => {
+      if (!checkin.value) return;
+      const inDate = new Date(checkin.value + "T00:00:00");
+      const minOut = new Date(inDate);
+      minOut.setDate(minOut.getDate() + 1);
+      const minOutISO = toISODate(minOut);
+      checkout.min = minOutISO;
+
+      if (!checkout.value || checkout.value < minOutISO) {
+        checkout.value = minOutISO;
+      }
+    });
+
+    /* =========================
+       FORM -> WhatsApp
+       ========================= */
+    document.getElementById("searchForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const guests = document.getElementById("guests").value;
+      const inVal = checkin.value;
+      const outVal = checkout.value;
+
+      const msg =
+        `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
+        `Ingreso: ${inVal}\n` +
+        `Salida: ${outVal}\n` +
+        `Personas: ${guests}\n`;
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank", "noopener");
+    });
+
+    /* =========================
+       NAV MOBILE (FIX: en celular no se superpone el menú desktop)
+       ========================= */
+    const mobileNavToggle = document.getElementById("mobileNavToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    function setMobileMenu(open) {
+      mobileMenu.classList.toggle("active", open);
+      mobileMenu.setAttribute("aria-hidden", String(!open));
+      mobileNavToggle.setAttribute("aria-expanded", String(open));
+      document.body.classList.toggle("no-scroll", open);
+    }
+
+    mobileNavToggle.addEventListener("click", () => {
+      const open = !mobileMenu.classList.contains("active");
+      setMobileMenu(open);
+    });
+
+    document.querySelectorAll(".mobile-link").forEach(a => {
+      a.addEventListener("click", () => setMobileMenu(false));
+    });
+
+    window.addEventListener("resize", () => {
+      // si vuelve a desktop, cerramos menú por las dudas
+      if (window.innerWidth >= 901) setMobileMenu(false);
+    });
+
+    /* =========================
+       SCROLL TOP
+       ========================= */
+    const scrollBtn = document.getElementById("scrollToTop");
+    window.addEventListener("scroll", () => {
+      scrollBtn.classList.toggle("visible", window.scrollY > 600);
+    });
+    scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    /* =========================
+       COUNTERS (Calificaciones)
+       ========================= */
+    const counters = document.querySelectorAll(".counter");
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseFloat(el.dataset.target || "0");
+        const decimals = parseInt(el.dataset.decimals || "0", 10);
+        const duration = 900;
+        const start = performance.now();
+
+        function tick(t) {
+          const p = Math.min(1, (t - start) / duration);
+          const val = target * p;
+          el.textContent = val.toFixed(decimals);
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.35 });
+
+    counters.forEach(c => counterObserver.observe(c));
+
+    /* =========================
+       LIGHTBOX CABAÑAS (Swiper) - FIX OK
+       ========================= */
+    const cabinImages = {
+      c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
+      c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
+      c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"]
+    };
+
+    let lightboxSwiper = null;
+
+    function openLightbox(cabinKey) {
+      const key = cabinKey && cabinImages[cabinKey] ? cabinKey : "c1";
+      const lb = document.getElementById("lightbox");
+      const wrapper = document.getElementById("lightbox-swiper-wrapper");
+      wrapper.innerHTML = "";
+
+      cabinImages[key].forEach((src, idx) => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
+          <img
+            src="${src}"
+            alt="Foto ${idx + 1}"
+            loading="eager"
+            decoding="async"
+            onerror="this.onerror=null;this.src='img/foto1.jpg';"
+          />
+        `;
+        wrapper.appendChild(slide);
+      });
+
+      lb.classList.add("active");
+      lb.setAttribute("aria-hidden", "false");
+      document.body.classList.add("no-scroll");
+
+      if (lightboxSwiper) {
+        lightboxSwiper.destroy(true, true);
+        lightboxSwiper = null;
+      }
+
+      const el = document.getElementById("lightboxSwiper");
+      lightboxSwiper = new Swiper(el, {
+        loop: false,
+        rewind: true,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        preloadImages: true,
+        watchOverflow: true,
+        observer: true,
+        observeParents: true,
+        pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
+        navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
+        keyboard: { enabled: true }
+      });
+
+      requestAnimationFrame(() => lightboxSwiper.update());
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById("lightbox");
+      lb.classList.remove("active");
+      lb.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("no-scroll");
+
+      if (lightboxSwiper) {
+        lightboxSwiper.destroy(true, true);
+        lightboxSwiper = null;
+      }
+    }
+
+    // Botones por cabaña
+    document.querySelectorAll("[data-open-lightbox]").forEach(btn => {
+      btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
+    });
+
+    // Botón header
+    document.getElementById("openCabinPhotos").addEventListener("click", () => openLightbox("c1"));
+
+    // Cerrar
+    document.getElementById("closeLightboxBtn").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox").addEventListener("click", (e) => {
+      if (e.target.id === "lightbox") closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeLightbox();
+    });
+    /* =========================
+   CAROUSEL (solo si existe en el DOM)
+   ========================= */
+(() => {
+  const track = document.getElementById("galleryTrack");
+  const dotsWrap = document.getElementById("galleryDots");
+  const prevBtn = document.querySelector("[data-carousel-prev]");
+  const nextBtn = document.querySelector("[data-carousel-next]");
+
+  // Si la galería está comentada o no existe, NO inicializamos nada
+  if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(track.querySelectorAll(".carousel-slide"));
+
+  function buildDots() {
+    dotsWrap.innerHTML = "";
+    slides.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.className = "carousel-dot" + (i === 0 ? " active" : "");
+      b.type = "button";
+      b.setAttribute("aria-label", `Ir a foto ${i + 1}`);
+      b.addEventListener("click", () => {
+        track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+      });
+      dotsWrap.appendChild(b);
+    });
+  }
+
+  function setActiveDot() {
+    const idx = Math.round(track.scrollLeft / track.clientWidth);
+    const dots = dotsWrap.querySelectorAll(".carousel-dot");
+    dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+  }
+
+  buildDots();
+  track.addEventListener("scroll", () => requestAnimationFrame(setActiveDot));
+
+  prevBtn.addEventListener("click", () => {
+    track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
+  });
+  nextBtn.addEventListener("click", () => {
+    track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+  });
+
+  window.addEventListener("resize", () => {
+    buildDots();
+    setActiveDot();
+  });
+})();
+/* =========================
+   VIDEO PLAY OVERLAY (tipo YouTube)
+   ========================= */
+(() => {
+  const v = document.getElementById("tourVideo");
+  const btn = document.querySelector(".video-play-btn");
+  if (!v || !btn) return;
+
+  const sync = () => btn.classList.toggle("hidden", !v.paused);
+  sync();
+
+  btn.addEventListener("click", async () => {
+    try { await v.play(); } catch (e) {}
+  });
+
+  v.addEventListener("play", sync);
+  v.addEventListener("pause", sync);
+  v.addEventListener("ended", sync);
+})();
+
+  </script>
 </body>
 </html>
