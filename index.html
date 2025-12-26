@@ -14,56 +14,11 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Swiper CSS (Lightbox) -->
+  <!-- Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="css.css" />
-
-  <!-- FIX: Lightbox close (podés mover esto a css.css si querés) -->
-  <style>
-    .lightbox{
-      position: fixed;
-      inset: 0;
-      z-index: 9990;
-      display: none;
-      background: rgba(0,0,0,.78);
-    }
-    .lightbox.active{ display: block; }
-
-    .lightbox .lightbox-swiper{
-      position: relative;
-      z-index: 1;
-      height: 100%;
-    }
-
-    /* botón X siempre clickeable arriba de Swiper */
-    .close-lightbox{
-      position: fixed;
-      top: max(14px, env(safe-area-inset-top));
-      right: max(14px, env(safe-area-inset-right));
-      z-index: 10000;
-
-      width: 44px;
-      height: 44px;
-      border: 0;
-      border-radius: 999px;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      background: rgba(0,0,0,.65);
-      color: #fff;
-      font-size: 20px;
-      line-height: 1;
-
-      cursor: pointer;
-      pointer-events: auto;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-    }
-  </style>
 </head>
 
 <body>
@@ -154,7 +109,7 @@
     </section>
 
     <!-- Propiedades -->
-    <section id="propiedades" aria-label="Cabañas disponibles">
+    <section id="propiedades" class="section section--no-divider" aria-label="Cabañas disponibles">
       <div class="container-wide">
         <div class="section-header">
           <h2>Nuestras cabañas</h2>
@@ -207,9 +162,17 @@
       </div>
     </section>
 
+    <!-- Separador suave -->
+    <div class="sep-soft" aria-hidden="true"></div>
+
     <!-- ¿Por qué elegirnos? -->
-    <section class="why" id="porque">
+    <section class="why section" id="porque">
       <div class="container-wide">
+        <div class="section-header">
+          <h2>¿Por qué elegirnos?</h2>
+          <p>Un espacio pensado para descansar y disfrutar con total comodidad.</p>
+        </div>
+
         <div class="why-grid">
           <div class="why-collage" aria-label="Fotos del complejo">
             <figure class="collage-item collage-item--big">
@@ -227,7 +190,6 @@
           </div>
 
           <div class="why-content">
-            <h2>¿Por qué elegirnos?</h2>
             <p class="why-lead">
               <strong>Cabañas Sol y Luna</strong> es un espacio pensado para descansar y disfrutar con total comodidad.
             </p>
@@ -267,8 +229,11 @@
       </div>
     </section>
 
+    <!-- Separador suave -->
+    <div class="sep-soft" aria-hidden="true"></div>
+
     <!-- Servicios -->
-    <section class="services" id="servicios" aria-label="Servicios">
+    <section class="services section" id="servicios" aria-label="Servicios">
       <div class="container">
         <div class="section-header">
           <h2>Servicios</h2>
@@ -297,8 +262,11 @@
       </div>
     </section>
 
+    <!-- Separador suave -->
+    <div class="sep-soft" aria-hidden="true"></div>
+
     <!-- Calificaciones -->
-    <section class="ratings" id="calificaciones" aria-label="Calificaciones">
+    <section class="ratings section" id="calificaciones" aria-label="Calificaciones">
       <div class="container">
         <div class="section-header">
           <h2>Calificaciones</h2>
@@ -372,7 +340,7 @@
       </div>
     </section>
 
-    <!-- Separadores -->
+    <!-- Separadores oscuros -->
     <div class="sep-dark" aria-hidden="true"></div>
 
     <!-- Video -->
@@ -495,7 +463,7 @@
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Galería de fotos">
     <button class="close-lightbox" type="button" aria-label="Cerrar galería" id="closeLightboxBtn">✖</button>
 
-    <div class="swiper lightbox-swiper" id="lightboxSwiper">
+    <div class="swiper lightbox-swiper" id="lightboxSwiper" aria-label="Carrusel de fotos">
       <div class="swiper-wrapper" id="lightbox-swiper-wrapper"></div>
       <div class="swiper-pagination"></div>
       <div class="swiper-button-prev" aria-label="Anterior"></div>
@@ -507,322 +475,232 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
   <script>
-    /* =========================
-       CONFIG WHATSAPP + FECHAS
-       ========================= */
-    const WHATSAPP_NUMBER = "5493512692064";
+    document.addEventListener("DOMContentLoaded", () => {
+      /* =========================
+         CONFIG WHATSAPP + FECHAS
+         ========================= */
+      const WHATSAPP_NUMBER = "5493512692064";
 
-    function toISODate(d) {
-      const pad = (n) => String(n).padStart(2, "0");
-      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-    }
-
-    const checkin = document.getElementById("checkin");
-    const checkout = document.getElementById("checkout");
-
-    const today = new Date();
-    const todayISO = toISODate(today);
-
-    if (checkin) checkin.min = todayISO;
-    if (checkout) checkout.min = todayISO;
-
-    if (checkin && checkout) {
-      checkin.addEventListener("change", () => {
-        if (!checkin.value) return;
-        const inDate = new Date(checkin.value + "T00:00:00");
-        const minOut = new Date(inDate);
-        minOut.setDate(minOut.getDate() + 1);
-        const minOutISO = toISODate(minOut);
-        checkout.min = minOutISO;
-
-        if (!checkout.value || checkout.value < minOutISO) {
-          checkout.value = minOutISO;
-        }
-      });
-    }
-
-    /* =========================
-       FORM -> WhatsApp
-       ========================= */
-    const searchForm = document.getElementById("searchForm");
-    if (searchForm) {
-      searchForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const guests = document.getElementById("guests")?.value || "";
-        const inVal = checkin?.value || "";
-        const outVal = checkout?.value || "";
-
-        const msg =
-          `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
-          `Ingreso: ${inVal}\n` +
-          `Salida: ${outVal}\n` +
-          `Personas: ${guests}\n`;
-
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-        window.open(url, "_blank", "noopener");
-      });
-    }
-
-    /* =========================
-       NAV MOBILE
-       ========================= */
-    const mobileNavToggle = document.getElementById("mobileNavToggle");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    function setMobileMenu(open) {
-      if (!mobileMenu || !mobileNavToggle) return;
-      mobileMenu.classList.toggle("active", open);
-      mobileMenu.setAttribute("aria-hidden", String(!open));
-      mobileNavToggle.setAttribute("aria-expanded", String(open));
-      document.body.classList.toggle("no-scroll", open);
-    }
-
-    if (mobileNavToggle) {
-      mobileNavToggle.addEventListener("click", () => {
-        const open = !mobileMenu?.classList.contains("active");
-        setMobileMenu(open);
-      });
-    }
-
-    document.querySelectorAll(".mobile-link").forEach(a => {
-      a.addEventListener("click", () => setMobileMenu(false));
-    });
-
-    window.addEventListener("resize", () => {
-      if (window.innerWidth >= 901) setMobileMenu(false);
-    });
-
-    /* =========================
-       SCROLL TOP
-       ========================= */
-    const scrollBtn = document.getElementById("scrollToTop");
-    window.addEventListener("scroll", () => {
-      if (!scrollBtn) return;
-      scrollBtn.classList.toggle("visible", window.scrollY > 600);
-    });
-    if (scrollBtn) {
-      scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    }
-
-    /* =========================
-       COUNTERS (Calificaciones)
-       ========================= */
-    const counters = document.querySelectorAll(".counter");
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = parseFloat(el.dataset.target || "0");
-        const decimals = parseInt(el.dataset.decimals || "0", 10);
-        const duration = 900;
-        const start = performance.now();
-
-        function tick(t) {
-          const p = Math.min(1, (t - start) / duration);
-          const val = target * p;
-          el.textContent = val.toFixed(decimals);
-          if (p < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-        counterObserver.unobserve(el);
-      });
-    }, { threshold: 0.35 });
-
-    counters.forEach(c => counterObserver.observe(c));
-
-    /* =========================
-       LIGHTBOX CABAÑAS (Swiper) - FIX CIERRE MOBILE
-       ========================= */
-    const cabinImages = {
-      c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
-      c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
-      c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"]
-    };
-
-    let lightboxSwiper = null;
-
-    function openLightbox(cabinKey) {
-      const key = (cabinKey && cabinImages[cabinKey]) ? cabinKey : "c1";
-      const lb = document.getElementById("lightbox");
-      const wrapper = document.getElementById("lightbox-swiper-wrapper");
-      const closeBtn = document.getElementById("closeLightboxBtn");
-      if (!lb || !wrapper) return;
-
-      wrapper.innerHTML = "";
-
-      cabinImages[key].forEach((src, idx) => {
-        const slide = document.createElement("div");
-        slide.className = "swiper-slide";
-        slide.innerHTML = `
-          <img
-            src="${src}"
-            alt="Foto ${idx + 1}"
-            loading="eager"
-            decoding="async"
-            onerror="this.onerror=null;this.src='img/foto1.jpg';"
-          />
-        `;
-        wrapper.appendChild(slide);
-      });
-
-      lb.classList.add("active");
-      lb.setAttribute("aria-hidden", "false");
-      document.body.classList.add("no-scroll");
-
-      if (lightboxSwiper) {
-        lightboxSwiper.destroy(true, true);
-        lightboxSwiper = null;
+      function toISODate(d) {
+        const pad = (n) => String(n).padStart(2, "0");
+        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
       }
 
-      const el = document.getElementById("lightboxSwiper");
-      if (!el) return;
+      const checkin = document.getElementById("checkin");
+      const checkout = document.getElementById("checkout");
 
-      lightboxSwiper = new Swiper(el, {
-        loop: false,
-        rewind: true,
-        slidesPerView: 1,
-        spaceBetween: 0,
-        preloadImages: true,
-        watchOverflow: true,
-        observer: true,
-        observeParents: true,
-        pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
-        navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
-        keyboard: { enabled: true },
-        // evita que el swipe “robe” taps del botón
-        touchStartPreventDefault: false
-      });
+      const today = new Date();
+      const todayISO = toISODate(today);
 
-      requestAnimationFrame(() => lightboxSwiper?.update());
+      if (checkin) checkin.min = todayISO;
+      if (checkout) checkout.min = todayISO;
 
-      // foco en el botón (ayuda en mobile / accesibilidad)
-      if (closeBtn) closeBtn.focus({ preventScroll: true });
-    }
+      if (checkin && checkout) {
+        checkin.addEventListener("change", () => {
+          if (!checkin.value) return;
+          const inDate = new Date(checkin.value + "T00:00:00");
+          const minOut = new Date(inDate);
+          minOut.setDate(minOut.getDate() + 1);
+          const minOutISO = toISODate(minOut);
+          checkout.min = minOutISO;
 
-    function closeLightbox() {
-      const lb = document.getElementById("lightbox");
-      if (!lb) return;
-
-      lb.classList.remove("active");
-      lb.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("no-scroll");
-
-      if (lightboxSwiper) {
-        lightboxSwiper.destroy(true, true);
-        lightboxSwiper = null;
-      }
-    }
-
-    // Abrir lightbox
-    document.querySelectorAll("[data-open-lightbox]").forEach(btn => {
-      btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
-    });
-
-    // (IMPORTANTE) tu código viejo rompía acá porque #openCabinPhotos NO existe.
-    // Lo dejamos opcional para que no corte el JS:
-    const openCabinPhotos = document.getElementById("openCabinPhotos");
-    if (openCabinPhotos) {
-      openCabinPhotos.addEventListener("click", () => openLightbox("c1"));
-    }
-
-    // Cerrar con botón X (usamos pointerdown + capture para ganarle a Swiper)
-    const closeBtn = document.getElementById("closeLightboxBtn");
-    if (closeBtn) {
-      const onClose = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        closeLightbox();
-      };
-      closeBtn.addEventListener("pointerdown", onClose, { capture: true });
-      closeBtn.addEventListener("click", onClose, { capture: true });
-      closeBtn.addEventListener("touchstart", onClose, { capture: true, passive: false });
-    }
-
-    // Cerrar tocando el fondo (no el swiper)
-    const lbEl = document.getElementById("lightbox");
-    if (lbEl) {
-      lbEl.addEventListener("pointerdown", (e) => {
-        if (e.target === lbEl) closeLightbox();
-      });
-      lbEl.addEventListener("click", (e) => {
-        if (e.target === lbEl) closeLightbox();
-      });
-    }
-
-    // Cerrar con ESC
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeLightbox();
-    });
-
-    /* =========================
-       CAROUSEL (solo si existe en el DOM)
-       ========================= */
-    (() => {
-      const track = document.getElementById("galleryTrack");
-      const dotsWrap = document.getElementById("galleryDots");
-      const prevBtn = document.querySelector("[data-carousel-prev]");
-      const nextBtn = document.querySelector("[data-carousel-next]");
-
-      if (!track || !dotsWrap || !prevBtn || !nextBtn) return;
-
-      const slides = Array.from(track.querySelectorAll(".carousel-slide"));
-
-      function buildDots() {
-        dotsWrap.innerHTML = "";
-        slides.forEach((_, i) => {
-          const b = document.createElement("button");
-          b.className = "carousel-dot" + (i === 0 ? " active" : "");
-          b.type = "button";
-          b.setAttribute("aria-label", `Ir a foto ${i + 1}`);
-          b.addEventListener("click", () => {
-            track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
-          });
-          dotsWrap.appendChild(b);
+          if (!checkout.value || checkout.value < minOutISO) {
+            checkout.value = minOutISO;
+          }
         });
       }
 
-      function setActiveDot() {
-        const idx = Math.round(track.scrollLeft / track.clientWidth);
-        const dots = dotsWrap.querySelectorAll(".carousel-dot");
-        dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+      /* =========================
+         FORM -> WhatsApp
+         ========================= */
+      const searchForm = document.getElementById("searchForm");
+      if (searchForm) {
+        searchForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const guests = document.getElementById("guests")?.value || "";
+          const inVal = checkin?.value || "";
+          const outVal = checkout?.value || "";
+
+          const msg =
+            `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
+            `Ingreso: ${inVal}\n` +
+            `Salida: ${outVal}\n` +
+            `Personas: ${guests}\n`;
+
+          const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+          window.open(url, "_blank", "noopener");
+        });
       }
 
-      buildDots();
-      track.addEventListener("scroll", () => requestAnimationFrame(setActiveDot));
+      /* =========================
+         NAV MOBILE
+         ========================= */
+      const mobileNavToggle = document.getElementById("mobileNavToggle");
+      const mobileMenu = document.getElementById("mobileMenu");
 
-      prevBtn.addEventListener("click", () => {
-        track.scrollBy({ left: -track.clientWidth, behavior: "smooth" });
-      });
-      nextBtn.addEventListener("click", () => {
-        track.scrollBy({ left: track.clientWidth, behavior: "smooth" });
+      function setMobileMenu(open) {
+        if (!mobileMenu || !mobileNavToggle) return;
+        mobileMenu.classList.toggle("active", open);
+        mobileMenu.setAttribute("aria-hidden", String(!open));
+        mobileNavToggle.setAttribute("aria-expanded", String(open));
+        document.body.classList.toggle("no-scroll", open);
+      }
+
+      if (mobileNavToggle) {
+        mobileNavToggle.addEventListener("click", () => {
+          const open = !mobileMenu?.classList.contains("active");
+          setMobileMenu(open);
+        });
+      }
+
+      document.querySelectorAll(".mobile-link").forEach(a => {
+        a.addEventListener("click", () => setMobileMenu(false));
       });
 
       window.addEventListener("resize", () => {
-        buildDots();
-        setActiveDot();
-      });
-    })();
-
-    /* =========================
-       VIDEO PLAY OVERLAY (si existe)
-       ========================= */
-    (() => {
-      const v = document.getElementById("tourVideo");
-      const btn = document.querySelector(".video-play-btn");
-      if (!v || !btn) return;
-
-      const sync = () => btn.classList.toggle("hidden", !v.paused);
-      sync();
-
-      btn.addEventListener("click", async () => {
-        try { await v.play(); } catch (e) {}
+        if (window.innerWidth >= 901) setMobileMenu(false);
       });
 
-      v.addEventListener("play", sync);
-      v.addEventListener("pause", sync);
-      v.addEventListener("ended", sync);
-    })();
+      /* =========================
+         SCROLL TOP
+         ========================= */
+      const scrollBtn = document.getElementById("scrollToTop");
+      window.addEventListener("scroll", () => {
+        if (!scrollBtn) return;
+        scrollBtn.classList.toggle("visible", window.scrollY > 600);
+      });
+      if (scrollBtn) {
+        scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+      }
+
+      /* =========================
+         COUNTERS (Calificaciones)
+         ========================= */
+      const counters = document.querySelectorAll(".counter");
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const target = parseFloat(el.dataset.target || "0");
+          const decimals = parseInt(el.dataset.decimals || "0", 10);
+          const duration = 900;
+          const start = performance.now();
+
+          function tick(t) {
+            const p = Math.min(1, (t - start) / duration);
+            const val = target * p;
+            el.textContent = val.toFixed(decimals);
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          counterObserver.unobserve(el);
+        });
+      }, { threshold: 0.35 });
+
+      counters.forEach(c => counterObserver.observe(c));
+
+      /* =========================
+         LIGHTBOX (Swiper) - cierre X garantizado
+         ========================= */
+      const cabinImages = {
+        c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
+        c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
+        c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"]
+      };
+
+      let lightboxSwiper = null;
+
+      const lb = document.getElementById("lightbox");
+      const wrapper = document.getElementById("lightbox-swiper-wrapper");
+      const closeBtn = document.getElementById("closeLightboxBtn");
+      const swiperEl = document.getElementById("lightboxSwiper");
+
+      function openLightbox(cabinKey) {
+        const key = (cabinKey && cabinImages[cabinKey]) ? cabinKey : "c1";
+        if (!lb || !wrapper || !swiperEl) return;
+
+        wrapper.innerHTML = "";
+
+        cabinImages[key].forEach((src, idx) => {
+          const slide = document.createElement("div");
+          slide.className = "swiper-slide";
+          slide.innerHTML = `
+            <img src="${src}" alt="Foto ${idx + 1}" loading="eager" decoding="async" />
+          `;
+          wrapper.appendChild(slide);
+        });
+
+        lb.classList.add("active");
+        lb.setAttribute("aria-hidden", "false");
+        document.body.classList.add("no-scroll");
+
+        if (lightboxSwiper) {
+          lightboxSwiper.destroy(true, true);
+          lightboxSwiper = null;
+        }
+
+        // Inicializa Swiper luego de mostrar (evita bugs de layout)
+        requestAnimationFrame(() => {
+          lightboxSwiper = new Swiper(swiperEl, {
+            loop: false,
+            rewind: true,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            watchOverflow: true,
+            observer: true,
+            observeParents: true,
+            pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
+            navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
+            keyboard: { enabled: true },
+            touchStartPreventDefault: false
+          });
+          lightboxSwiper.update();
+        });
+
+        if (closeBtn) closeBtn.focus({ preventScroll: true });
+      }
+
+      function closeLightbox() {
+        if (!lb) return;
+
+        lb.classList.remove("active");
+        lb.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("no-scroll");
+
+        if (lightboxSwiper) {
+          lightboxSwiper.destroy(true, true);
+          lightboxSwiper = null;
+        }
+
+        // Limpia slides para evitar que quede “pegada” la anterior
+        if (wrapper) wrapper.innerHTML = "";
+      }
+
+      // Abrir lightbox
+      document.querySelectorAll("[data-open-lightbox]").forEach(btn => {
+        btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
+      });
+
+      // Cierre: capturamos el evento para ganarle a Swiper (PC y móvil)
+      document.addEventListener("pointerdown", (e) => {
+        const hitClose = e.target.closest("#closeLightboxBtn");
+        if (hitClose) {
+          e.preventDefault();
+          e.stopPropagation();
+          closeLightbox();
+        }
+      }, true);
+
+      document.addEventListener("click", (e) => {
+        // clic afuera: cierra
+        if (e.target === lb) closeLightbox();
+      }, true);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+      });
+    });
   </script>
 </body>
 </html>

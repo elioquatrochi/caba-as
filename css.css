@@ -11,7 +11,7 @@
   --cream: #f6f1e8;
   --white: #ffffff;
   --text: #1d2b22;
-  --muted: rgbagba(0,0,0,0.65);
+  --muted: rgba(0,0,0,0.65); /* FIX: estaba rgbagba */
 
   --radius: 18px;
   --shadow: 0 18px 40px rgba(0,0,0,.12);
@@ -43,6 +43,62 @@ button{ font: inherit; }
 .container{ width: min(var(--container), 92vw); margin: 0 auto; }
 .container-wide{ width: min(var(--container-wide), 92vw); margin: 0 auto; }
 .no-scroll{ overflow: hidden; }
+
+/* =========================
+   SECCIONES: separación suave
+   ========================= */
+.section{
+  padding: 74px 0;
+}
+.section--no-divider{
+  padding-top: 64px;
+}
+.sep-soft{
+  height: 64px;
+  position: relative;
+}
+.sep-soft::before{
+  content:"";
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(820px, 92%);
+  height: 1px;
+  background: rgba(0,0,0,0.10);
+}
+.sep-soft::after{
+  content:"";
+  position:absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22px;
+  background: radial-gradient(closest-side, rgba(0,0,0,0.06), rgba(0,0,0,0) 70%);
+}
+
+@media (max-width: 900px){
+  .section{ padding: 58px 0; }
+  .sep-soft{ height: 48px; }
+}
+
+/* =========================
+   SECTION HEADER
+   ========================= */
+.section-header{
+  text-align: center;
+  padding: 0 0 26px;
+}
+.section-header h2{
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 2.8vw, 2.7rem);
+  color: var(--forest);
+  margin-bottom: 8px;
+}
+.section-header p{
+  color: rgba(0,0,0,.65);
+  font-size: 1.05rem;
+}
 
 /* =========================
    HEADER
@@ -290,31 +346,13 @@ button{ font: inherit; }
 }
 
 /* =========================
-   SECTION HEADER
-   ========================= */
-.section-header{
-  text-align: center;
-  padding: 64px 0 24px;
-}
-.section-header h2{
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 2.8vw, 2.7rem);
-  color: var(--forest);
-  margin-bottom: 8px;
-}
-.section-header p{
-  color: rgba(0,0,0,.65);
-  font-size: 1.05rem;
-}
-
-/* =========================
    PROPERTIES
    ========================= */
 .properties-grid{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  padding-bottom: 70px;
+  padding-top: 12px;
 }
 
 .property-card{
@@ -368,8 +406,6 @@ button{ font: inherit; }
 /* =========================
    WHY
    ========================= */
-.why{ padding-bottom: 68px; }
-
 .why-grid{
   display: grid;
   grid-template-columns: 1.05fr .95fr;
@@ -401,12 +437,6 @@ button{ font: inherit; }
 .collage-item--small2{ grid-column: 9 / 13; grid-row: 4 / 7; }
 .collage-item--small3{ grid-column: 9 / 13; grid-row: 7 / 11; }
 
-.why-content h2{
-  font-family: var(--font-display);
-  color: var(--forest);
-  font-size: clamp(1.6rem, 2.3vw, 2.3rem);
-  margin-bottom: 10px;
-}
 .why-lead{
   color: rgba(0,0,0,.72);
   font-size: 1.05rem;
@@ -486,8 +516,6 @@ button{ font: inherit; }
 /* =========================
    SERVICES
    ========================= */
-.services{ padding-bottom: 70px; }
-
 .services-grid{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -515,8 +543,6 @@ button{ font: inherit; }
 /* =========================
    RATINGS
    ========================= */
-.ratings{ padding-bottom: 80px; }
-
 .ratings-grid{
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -724,14 +750,14 @@ button{ font: inherit; }
 }
 
 /* =========================
-   LIGHTBOX (Swiper)
+   LIGHTBOX (Swiper) - ÚNICO, sin duplicados
    ========================= */
 .lightbox{
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,.86);
   display: none;
-  z-index: 2000;
+  z-index: 5000;
   padding: 18px;
 }
 .lightbox.active{
@@ -739,20 +765,7 @@ button{ font: inherit; }
   place-items: center;
 }
 
-.close-lightbox{
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(0,0,0,.35);
-  color: #fff;
-  cursor: pointer;
-  font-size: 18px;
-}
-
+/* Swiper contenedor */
 .lightbox-swiper{
   width: min(1100px, 92vw);
   height: min(78vh, 720px);
@@ -761,6 +774,8 @@ button{ font: inherit; }
   background: #000;
   box-shadow: 0 24px 60px rgba(0,0,0,.35);
   border: 1px solid rgba(255,255,255,.10);
+  position: relative;
+  z-index: 1;
 }
 
 .lightbox .swiper-slide{
@@ -777,12 +792,41 @@ button{ font: inherit; }
   background: #000;
 }
 
-/* Swiper buttons look */
+/* Botón X (arriba SIEMPRE) */
+.close-lightbox{
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 6000;
+
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(0,0,0,.62);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.close-lightbox:hover{ background: rgba(0,0,0,.75); }
+.close-lightbox:active{ transform: scale(0.98); }
+
+/* Swiper botones */
 .lightbox .swiper-button-prev,
 .lightbox .swiper-button-next{
   color: #fff;
   text-shadow: 0 10px 20px rgba(0,0,0,.35);
 }
+
 .lightbox .swiper-pagination-bullet{
   background: rgba(255,255,255,.55);
   opacity: 1;
@@ -790,132 +834,32 @@ button{ font: inherit; }
 .lightbox .swiper-pagination-bullet-active{
   background: #ffffff;
 }
-/* ===== LIGHTBOX: FIX cierre en celular ===== */
-.lightbox{
-  position: fixed;
-  inset: 0;
-  z-index: 9990;
-}
 
-/* aseguramos que el swiper quede debajo del botón */
-.lightbox .lightbox-swiper{
-  position: relative;
-  z-index: 1;
-}
-
-.close-lightbox{
-  position: fixed;
-  top: max(14px, env(safe-area-inset-top));
-  right: max(14px, env(safe-area-inset-right));
-  z-index: 10000;
-
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 999px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0,0,0,.65);
-  color: #fff;
-  font-size: 20px;
-  line-height: 1;
-
-  cursor: pointer;
-  pointer-events: auto;        /* clave */
-  touch-action: manipulation;  /* clave */
-  -webkit-tap-highlight-color: transparent;
-}
-
-.close-lightbox:active{
-  transform: scale(0.98);
-}
-.close-lightbox-bottom{
-  position: fixed;
-  left: 14px;
-  right: 14px;
-  bottom: max(14px, env(safe-area-inset-bottom));
-  z-index: 9999;
-
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.18);
-
-  background: rgba(0,0,0,0.65);
-  color: #fff;
-  font-weight: 700;
-}
-@media (min-width: 901px){
-  .close-lightbox-bottom{ display:none; }
-}
-
-/* Asegura que Swiper no tape el botón */
-.lightbox .swiper,
-.lightbox .swiper-wrapper,
-.lightbox .swiper-slide{
-  z-index: 1;
-}
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-@media (max-width: 900px){
-  /* FIX: en celular ocultamos menu desktop SIEMPRE */
-  .nav-links{ display: none; }
-  .mobile-nav-toggle{ display: inline-flex; }
-
-  .search-form{
-    grid-template-columns: 1fr;
-  }
-  .search-submit{ width: 100%; min-width: 0; }
-
-  .properties-grid{
-    grid-template-columns: 1fr;
-  }
-  .property-image{ height: 220px; }
-
-  .why-grid{
-    grid-template-columns: 1fr;
-  }
-  .why-collage{
-    grid-template-rows: repeat(10, 24px);
-  }
-
-  .services-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .ratings-grid{
-    grid-template-columns: 1fr;
-  }
-
-  .cta-final-container{
-    grid-template-columns: 1fr;
-  }
-
-  .footer-content{
-    grid-template-columns: 1fr;
-  }
-
-  .hero{ min-height: 92vh; }
-  .hero-content{ padding: 36px 0 46px; }
-  .logo img{ height: 40px; }
-
-  .mobile-menu{ inset: 66px 0 auto 0; }
-}
-
-@media (max-width: 420px){
-  .view-button{ padding: 9px 12px; font-weight: 900; }
-  .hero-content p{ font-size: 1rem; }
-}
 /* =========================
    SEPARADOR OSCURO
    ========================= */
-.section-sep-dark{
-  height: 28px;
-  background: linear-gradient(180deg, rgba(16,24,18,0) 0%, rgba(16,24,18,.85) 55%, rgba(16,24,18,1) 100%);
+.sep-dark{
+  height: 72px;
+  position: relative;
+}
+.sep-dark::before{
+  content:"";
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(720px, 92%);
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+}
+.sep-dark::after{
+  content:"";
+  position:absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 40px;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.08), rgba(255,255,255,0) 70%);
 }
 
 /* =========================
@@ -928,17 +872,9 @@ button{ font: inherit; }
   padding: 72px 0;
 }
 
-.section-header--light h2{
-  color: #f4f1e9;
-}
+.section-header--light h2{ color: #f4f1e9; }
+.section-header--light p{ color: rgba(244,241,233,.82); }
 
-.section-header--light p{
-  color: rgba(244,241,233,.82);
-}
-
-/* =========================
-   VIDEO (con play / controls)
-   ========================= */
 .video-card{
   margin-top: 18px;
   background: rgba(255,255,255,0.06);
@@ -949,17 +885,19 @@ button{ font: inherit; }
 }
 
 .video-frame{
+  position: relative;
   border-radius: 14px;
   overflow: hidden;
   background: #000;
   aspect-ratio: 16 / 9;
 }
 
-.video-frame video{
+.video-frame .tour-video-player{
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
+  pointer-events: auto !important;
 }
 
 .video-note{
@@ -968,9 +906,6 @@ button{ font: inherit; }
   font-size: .95rem;
 }
 
-/* =========================
-   UBICACIÓN + MAPA
-   ========================= */
 .location-grid{
   margin-top: 18px;
   display: grid;
@@ -988,12 +923,11 @@ button{ font: inherit; }
 
 .location-info h3{
   margin-bottom: 10px;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.4rem;
 }
 
 .location-list{
-  list-style: none;
   padding: 0;
   margin: 14px 0 18px;
   display: grid;
@@ -1027,143 +961,46 @@ button{ font: inherit; }
   border: 0;
   display: block;
 }
-.map-overlay{
-  position:absolute;
-  inset:0;
-  z-index: 1;
-}
-.map-cta{ z-index: 2; }
 
 /* =========================
    RESPONSIVE
    ========================= */
 @media (max-width: 900px){
+  .nav-links{ display: none; }
+  .mobile-nav-toggle{ display: inline-flex; }
+
+  .search-form{ grid-template-columns: 1fr; }
+  .search-submit{ width: 100%; min-width: 0; }
+
+  .properties-grid{ grid-template-columns: 1fr; }
+  .property-image{ height: 220px; }
+
+  .why-grid{ grid-template-columns: 1fr; }
+  .why-collage{ grid-template-rows: repeat(10, 24px); }
+
+  .services-grid{ grid-template-columns: 1fr; }
+  .ratings-grid{ grid-template-columns: 1fr; }
+
+  .cta-final-container{ grid-template-columns: 1fr; }
+  .footer-content{ grid-template-columns: 1fr; }
+
+  .hero{ min-height: 92vh; }
+  .hero-content{ padding: 36px 0 46px; }
+  .logo img{ height: 40px; }
+
+  .mobile-menu{ inset: 66px 0 auto 0; }
+
   .tour-video,
-  .location{
-    padding: 56px 0;
-  }
+  .location{ padding: 56px 0; }
 
-  .location-grid{
-    grid-template-columns: 1fr;
-  }
+  .location-grid{ grid-template-columns: 1fr; }
+  .location-map{ min-height: 280px; }
+  .location-map iframe{ min-height: 280px; }
 
-  .location-map{
-    min-height: 280px;
-  }
-  .location-map iframe{
-    min-height: 280px;
-  }
-}
-/* Separador VERDE (más marcado) */
-.section-sep-forest{
-  height: 34px;
-  background: linear-gradient(180deg, rgba(245,241,233,0) 0%, rgba(15,26,18,.65) 55%, rgba(15,26,18,1) 100%);
-}
-
-/* Video section */
-.tour-video{
-  background: #0f1a12;
-  color: #f4f1e9;
-  padding: 72px 0;
-}
-
-.section-header--light h2{ color:#f4f1e9; }
-.section-header--light p{ color: rgba(244,241,233,.82); }
-
-.video-card{
-  margin-top: 18px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 18px 45px rgba(0,0,0,.25);
-}
-
-/* IMPORTANTE: position relative para el botón play */
-.video-frame{
-  position: relative;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #000;
-  aspect-ratio: 16 / 9;
-}
-
-/* Fuerza interactividad aunque tengas CSS global que rompa videos */
-.video-frame .tour-video-player{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  pointer-events: auto !important;
-}
-
-/* Botón play centrado */
-.video-play-btn{
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 74px;
-  height: 74px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.35);
-  background: rgba(0,0,0,.45);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: transform .18s ease, background .18s ease, opacity .18s ease;
-}
-
-.video-play-btn i{ font-size: 22px; margin-left: 3px; }
-
-.video-play-btn:hover{
-  transform: scale(1.04);
-  background: rgba(0,0,0,.58);
-}
-
-.video-play-btn.hidden{
-  opacity: 0;
-  pointer-events: none;
-}
-
-.video-note{
-  margin-top: 12px;
-  color: rgba(244,241,233,.78);
-  font-size: .95rem;
-}
-
-@media (max-width: 900px){
-  .tour-video{ padding: 56px 0; }
-}
-/* Separador entre secciones oscuras */
-.sep-dark{
-  height: 72px;                 /* aire */
-  position: relative;
-}
-
-/* “línea” suave al medio */
-.sep-dark::before{
-  content:"";
-  position:absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(720px, 92%);
-  height: 1px;
-  background: rgba(255,255,255,0.18);
-}
-
-/* brillo suave abajo (corte visual) */
-.sep-dark::after{
-  content:"";
-  position:absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 40px;
-  background: radial-gradient(closest-side, rgba(255,255,255,0.08), rgba(255,255,255,0) 70%);
-}
-
-@media (max-width: 900px){
   .sep-dark{ height: 56px; }
+}
+
+@media (max-width: 420px){
+  .view-button{ padding: 9px 12px; font-weight: 900; }
+  .hero-content p{ font-size: 1rem; }
 }
