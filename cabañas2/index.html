@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reservas</title>
+
+  <!-- Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <!-- Tu CSS -->
+  <link rel="stylesheet" href="css.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div>
+        <h1>Calendario de Reservas</h1>
+        <p class="muted">Las fechas anteriores a hoy quedan bloqueadas. Las reservas confirmadas aparecen en gris.</p>
+      </div>
+      <div class="legend">
+        <span><i class="dot dot-free"></i> Disponible</span>
+        <span><i class="dot dot-block"></i> Ocupado</span>
+        <span><i class="dot dot-past"></i> Pasado</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Solicitud</h2>
+
+        <form id="formReserva" class="form">
+          <label>
+            Cabaña
+            <select id="cabana" required>
+              <option value="Cabana 1">Cabaña 1</option>
+              <option value="Cabana 2">Cabaña 2</option>
+              <option value="Cabana 3">Cabaña 3</option>
+            </select>
+          </label>
+
+          <label>
+            Personas
+            <select id="personas" required>
+              <option value="2">2 personas</option>
+              <option value="4">4 personas</option>
+              <option value="6">6 personas</option>
+            </select>
+          </label>
+
+          <label>
+            Nombre
+            <input id="nombre" type="text" placeholder="Ej: Pepito" required />
+          </label>
+
+          <label>
+            Teléfono (WhatsApp)
+            <input id="telefono" type="tel" placeholder="Ej: 3515555555" required />
+          </label>
+
+          <div class="row2">
+            <label>
+              Ingreso (check-in)
+              <input id="checkin" type="text" placeholder="Seleccioná fecha" required />
+            </label>
+
+            <label>
+              Salida (check-out)
+              <input id="checkout" type="text" placeholder="Seleccioná fecha" required />
+            </label>
+          </div>
+
+          <button class="btn" type="submit" id="btnEnviar">Enviar solicitud</button>
+
+          <div id="msg" class="msg" aria-live="polite"></div>
+
+          <div id="confirmBox" class="confirmBox hidden">
+            <h3>Confirmación</h3>
+            <p>La solicitud quedó <b>PENDIENTE</b>. Para bloquear definitivamente las fechas, hay que confirmar.</p>
+
+            <div class="actions">
+              
+              <a id="btnWhats" class="btn btn-secondary" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+            </div>
+
+            <p class="muted small">
+              Cuando el cliente abre el link de confirmación, la reserva pasa a <b>CONFIRMADA</b> y el calendario se actualiza.
+            </p>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Disponibilidad</h2>
+
+        <div class="calendarWrap">
+          <div>
+            <p class="muted small">Calendario (bloquea pasado + confirmadas)</p>
+            <div id="calInline"></div>
+          </div>
+
+          <div class="list">
+            <p class="muted small">Reservas confirmadas (cabaña seleccionada)</p>
+            <ul id="listaConfirmadas" class="ul"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer muted small">
+      UI servida por Apps Script + datos en Google Sheets (sin base de datos paga).
+    </footer>
+  </div>
+
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <!-- Tu JS -->
+  <script src="js.js"></script>
+</body>
+</html>
