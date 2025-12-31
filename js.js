@@ -1,247 +1,256 @@
-document.addEventListener("DOMContentLoaded", () => {
-  /* =========================
-     CONFIG WHATSAPP + FECHAS
-     ========================= */
-  const WHATSAPP_NUMBER = "5493512692064";
+/* =========================
+   HELPERS
+   ========================= */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  function toISODate(d) {
-    const pad = (n) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
+/* =========================
+   HEADER SCROLL EFFECT
+   ========================= */
+(function headerScroll(){
+  const header = $("#header");
+  if(!header) return;
 
-  const checkin = document.getElementById("checkin");
-  const checkout = document.getElementById("checkout");
-
-  const today = new Date();
-  const todayISO = toISODate(today);
-
-  if (checkin) checkin.min = todayISO;
-  if (checkout) checkout.min = todayISO;
-
-  if (checkin && checkout) {
-    checkin.addEventListener("change", () => {
-      if (!checkin.value) return;
-      const inDate = new Date(checkin.value + "T00:00:00");
-      const minOut = new Date(inDate);
-      minOut.setDate(minOut.getDate() + 1);
-      const minOutISO = toISODate(minOut);
-      checkout.min = minOutISO;
-
-      if (!checkout.value || checkout.value < minOutISO) {
-        checkout.value = minOutISO;
-      }
-    });
-  }
-
-  /* =========================
-     FORM -> WhatsApp
-     ========================= */
-  const searchForm = document.getElementById("searchForm");
-  if (searchForm) {
-    searchForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const guests = document.getElementById("guests")?.value || "";
-      const inVal = checkin?.value || "";
-      const outVal = checkout?.value || "";
-
-      const msg =
-        `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
-        `Ingreso: ${inVal}\n` +
-        `Salida: ${outVal}\n` +
-        `Personas: ${guests}\n`;
-
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-      window.open(url, "_blank", "noopener");
-    });
-  }
-
-  /* =========================
-     NAV MOBILE
-     ========================= */
-  const mobileNavToggle = document.getElementById("mobileNavToggle");
-  const mobileMenu = document.getElementById("mobileMenu");
-
-  function setMobileMenu(open) {
-    if (!mobileMenu || !mobileNavToggle) return;
-    mobileMenu.classList.toggle("active", open);
-    mobileMenu.setAttribute("aria-hidden", String(!open));
-    mobileNavToggle.setAttribute("aria-expanded", String(open));
-    document.body.classList.toggle("no-scroll", open);
-  }
-
-  if (mobileNavToggle) {
-    mobileNavToggle.addEventListener("click", () => {
-      const open = !mobileMenu?.classList.contains("active");
-      setMobileMenu(open);
-    });
-  }
-
-  document.querySelectorAll(".mobile-link").forEach((a) => {
-    a.addEventListener("click", () => setMobileMenu(false));
-  });
-
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 901) setMobileMenu(false);
-  });
-
-  /* =========================
-     SCROLL TOP
-     ========================= */
-  const scrollBtn = document.getElementById("scrollToTop");
-  window.addEventListener("scroll", () => {
-    if (!scrollBtn) return;
-    scrollBtn.classList.toggle("visible", window.scrollY > 600);
-  });
-  if (scrollBtn) {
-    scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-  }
-
-  /* =========================
-     COUNTERS (Calificaciones)
-     ========================= */
-  const counters = document.querySelectorAll(".counter");
-  const counterObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = parseFloat(el.dataset.target || "0");
-        const decimals = parseInt(el.dataset.decimals || "0", 10);
-        const duration = 900;
-        const start = performance.now();
-
-        function tick(t) {
-          const p = Math.min(1, (t - start) / duration);
-          const val = target * p;
-          el.textContent = val.toFixed(decimals);
-          if (p < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-        counterObserver.unobserve(el);
-      });
-    },
-    { threshold: 0.35 }
-  );
-
-  counters.forEach((c) => counterObserver.observe(c));
-
-  /* =========================
-     LIGHTBOX (Swiper) - FIX bug mobile + X izquierda
-     ========================= */
-  const cabinImages = {
-    c1: ["img/foto1.jpg", "img/foto2.jpg", "img/foto3.jpg", "img/foto4.jpg"],
-    c2: ["img/foto5.jpg", "img/foto6.jpg", "img/foto7.jpg", "img/foto8.jpg"],
-    c3: ["img/foto9.jpg", "img/foto10.jpg", "img/foto11.jpg", "img/foto12.jpg"],
-    c4: ["img/foto13.jpg", "img/foto12.jpg", "img/foto11.jpg", "img/foto10.jpg"]
+  const onScroll = () => {
+    if (window.scrollY > 8) header.classList.add("is-scrolled");
+    else header.classList.remove("is-scrolled");
   };
 
-  let lightboxSwiper = null;
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
 
-  const lb = document.getElementById("lightbox");
-  const wrapper = document.getElementById("lightbox-swiper-wrapper");
-  const closeBtn = document.getElementById("closeLightboxBtn");
-  const swiperEl = document.getElementById("lightboxSwiper");
+/* =========================
+   MOBILE MENU
+   ========================= */
+(function mobileMenu(){
+  const toggle = $("#mobileNavToggle");
+  const menu = $("#mobileMenu");
+  if(!toggle || !menu) return;
 
-  function openLightbox(cabinKey) {
-    const key = cabinKey && cabinImages[cabinKey] ? cabinKey : "c1";
-    if (!lb || !wrapper || !swiperEl) return;
+  const setState = (open) => {
+    menu.classList.toggle("is-open", open);
+    menu.setAttribute("aria-hidden", String(!open));
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+  };
 
-    wrapper.innerHTML = "";
-
-    cabinImages[key].forEach((src, idx) => {
-      const slide = document.createElement("div");
-      slide.className = "swiper-slide";
-      slide.innerHTML = `<img src="${src}" alt="Foto ${idx + 1}" loading="eager" decoding="async" />`;
-      wrapper.appendChild(slide);
-    });
-
-    lb.classList.remove("closing");
-    lb.classList.add("active");
-    lb.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
-
-    if (lightboxSwiper) {
-      lightboxSwiper.destroy(true, true);
-      lightboxSwiper = null;
-    }
-
-    // Inicializa Swiper luego de mostrar (evita bugs de layout)
-    requestAnimationFrame(() => {
-      lightboxSwiper = new Swiper(swiperEl, {
-        loop: false,
-        rewind: true,
-        slidesPerView: 1,
-        spaceBetween: 0,
-        watchOverflow: true,
-        observer: true,
-        observeParents: true,
-        pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
-        navigation: {
-          nextEl: lb.querySelector(".swiper-button-next"),
-          prevEl: lb.querySelector(".swiper-button-prev")
-        },
-        keyboard: { enabled: true },
-        touchStartPreventDefault: false
-      });
-      lightboxSwiper.update();
-    });
-
-    closeBtn?.focus({ preventScroll: true });
-  }
-
-  // Cierre con transición para evitar “click-through” en móvil
-  function closeLightboxSafe() {
-    if (!lb) return;
-
-    // Mantener overlay un instante para que el tap no caiga en el menú
-    lb.classList.add("closing");
-    lb.classList.remove("active");
-    lb.setAttribute("aria-hidden", "true");
-
-    setTimeout(() => {
-      document.body.classList.remove("no-scroll");
-
-      if (lightboxSwiper) {
-        lightboxSwiper.destroy(true, true);
-        lightboxSwiper = null;
-      }
-      if (wrapper) wrapper.innerHTML = "";
-
-      lb.classList.remove("closing");
-      // display none lo maneja CSS al no estar active/closing
-    }, 170);
-  }
-
-  // Abrir lightbox
-  document.querySelectorAll("[data-open-lightbox]").forEach((btn) => {
-    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
+  toggle.addEventListener("click", () => {
+    const open = !menu.classList.contains("is-open");
+    setState(open);
   });
 
-  // Close btn: evitar que el tap genere click en el menú debajo (mobile)
-  if (closeBtn) {
-    closeBtn.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }, { passive: false });
-
-    closeBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      closeLightboxSafe();
-    });
-  }
-
-  // clic afuera: cierra
-  document.addEventListener(
-    "click",
-    (e) => {
-      if (e.target === lb) closeLightboxSafe();
-    },
-    true
-  );
+  $$(".mobile-link", menu).forEach(a => {
+    a.addEventListener("click", () => setState(false));
+  });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightboxSafe();
+    if(e.key === "Escape") setState(false);
   });
-});
+})();
+
+/* =========================
+   SCROLL TO TOP
+   ========================= */
+(function scrollTop(){
+  const btn = $("#scrollToTop");
+  if(!btn) return;
+
+  const onScroll = () => {
+    btn.classList.toggle("is-visible", window.scrollY > 500);
+  };
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+
+/* =========================
+   HERO SWIPER (flechas + autoplay)
+   ========================= */
+(function heroSwiperInit(){
+  const el = $("#heroSwiper");
+  if(!el || typeof Swiper === "undefined") return;
+
+  new Swiper("#heroSwiper", {
+    loop: true,
+    speed: 900,
+    effect: "slide",
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    pagination: {
+      el: ".hero-pagination",
+      clickable: true
+    },
+    navigation: {
+      nextEl: ".hero-next",
+      prevEl: ".hero-prev"
+    },
+    keyboard: { enabled: true },
+    grabCursor: true
+  });
+})();
+
+/* =========================
+   LIGHTBOX (Swiper)
+   ========================= */
+(function lightboxInit(){
+  const lightbox = $("#lightbox");
+  const closeBtn = $("#closeLightboxBtn");
+  const wrapper = $("#lightbox-swiper-wrapper");
+  if(!lightbox || !closeBtn || !wrapper || typeof Swiper === "undefined") return;
+
+  // Editá estas galerías con tus fotos reales:
+  const GALLERIES = {
+    c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
+    c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
+    c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"],
+    c4: ["img/foto13.jpg","img/foto14.jpg","img/foto15.jpg","img/foto16.jpg"]
+  };
+
+  let swiper = null;
+
+  const open = (key) => {
+    const imgs = GALLERIES[key] || [];
+    wrapper.innerHTML = imgs.map(src => `
+      <div class="swiper-slide">
+        <img src="${src}" alt="Foto de ${key}" loading="lazy" decoding="async">
+      </div>
+    `).join("");
+
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    if(swiper){
+      swiper.update();
+      swiper.slideTo(0, 0);
+    } else {
+      swiper = new Swiper("#lightboxSwiper", {
+        loop: true,
+        speed: 650,
+        pagination: { el: "#lightboxSwiper .swiper-pagination", clickable: true },
+        navigation: {
+          nextEl: "#lightboxSwiper .swiper-button-next",
+          prevEl: "#lightboxSwiper .swiper-button-prev"
+        },
+        keyboard: { enabled: true },
+        grabCursor: true
+      });
+    }
+  };
+
+  const close = () => {
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  // botones "Ver fotos"
+  $$("[data-open-lightbox]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-open-lightbox");
+      open(key);
+    });
+  });
+
+  closeBtn.addEventListener("click", close);
+
+  // cerrar tocando el fondo (no el swiper)
+  lightbox.addEventListener("click", (e) => {
+    if(e.target === lightbox) close();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && lightbox.classList.contains("is-open")) close();
+  });
+})();
+
+/* =========================
+   REVIEWS: autoplay + flechas (PC) + loop
+   ========================= */
+(function reviewsCarousel(){
+  const track = $("#reviewsTrack");
+  const prevBtn = $(".sl-nav-prev");
+  const nextBtn = $(".sl-nav-next");
+  if(!track || !prevBtn || !nextBtn) return;
+
+  // cantidad a desplazar por click (aprox 1 card)
+  const getStep = () => {
+    const first = track.querySelector(".sl-review");
+    if(!first) return 320;
+    const styles = getComputedStyle(track);
+    const gap = parseInt(styles.columnGap || styles.gap || "14", 10) || 14;
+    return first.getBoundingClientRect().width + gap;
+  };
+
+  const scrollByStep = (dir) => {
+    const step = getStep() * dir;
+    track.scrollBy({ left: step, behavior: "smooth" });
+  };
+
+  prevBtn.addEventListener("click", () => scrollByStep(-1));
+  nextBtn.addEventListener("click", () => scrollByStep(1));
+
+  // autoplay
+  let autoplayId = null;
+  const start = () => {
+    stop();
+    autoplayId = setInterval(() => {
+      const max = track.scrollWidth - track.clientWidth;
+
+      // Si está al final, volvemos al inicio (loop)
+      if(track.scrollLeft >= max - 8){
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        scrollByStep(1);
+      }
+    }, 2600);
+  };
+
+  const stop = () => {
+    if(autoplayId) clearInterval(autoplayId);
+    autoplayId = null;
+  };
+
+  // pausa al pasar el mouse (PC) y al tocar/arrastrar
+  track.addEventListener("mouseenter", stop);
+  track.addEventListener("mouseleave", start);
+
+  let isPointerDown = false;
+  track.addEventListener("pointerdown", () => { isPointerDown = true; stop(); });
+  track.addEventListener("pointerup", () => { isPointerDown = false; start(); });
+  track.addEventListener("pointercancel", () => { isPointerDown = false; start(); });
+
+  // arrastre simple (mejor UX en PC)
+  let startX = 0;
+  let startScroll = 0;
+
+  track.addEventListener("mousedown", (e) => {
+    isPointerDown = true;
+    startX = e.pageX;
+    startScroll = track.scrollLeft;
+    track.classList.add("is-dragging");
+  });
+
+  window.addEventListener("mouseup", () => {
+    if(!isPointerDown) return;
+    isPointerDown = false;
+    track.classList.remove("is-dragging");
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if(!isPointerDown) return;
+    const dx = e.pageX - startX;
+    track.scrollLeft = startScroll - dx;
+  });
+
+  // iniciar autoplay
+  start();
+})();
