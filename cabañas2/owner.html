@@ -9,21 +9,21 @@
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div>
+    <header class="top">
+      <div class="topLeft">
         <h1>Panel del Dueño</h1>
         <div class="muted small">Acciones: WhatsApp / Confirmar / Rechazar / Eliminar / Reset total</div>
       </div>
 
-      <div class="row">
+      <div class="topActions">
         <button id="btnReload" class="btn ghost">Recargar</button>
         <button id="btnReset" class="btn danger">Reset total</button>
         <button id="btnLogout" class="btn ghost">Salir</button>
       </div>
-    </div>
+    </header>
 
     <!-- LOGIN -->
-    <div id="loginBox" class="card">
+    <section id="loginBox" class="card">
       <div class="row">
         <label>
           PIN
@@ -32,10 +32,10 @@
         <button id="btnLogin" class="btn">Entrar</button>
       </div>
       <div id="loginMsg" class="msg"></div>
-    </div>
+    </section>
 
     <!-- PANEL -->
-    <div id="panel" class="card hidden">
+    <section id="panel" class="card hidden">
       <div class="filters">
         <div class="row">
           <label>
@@ -60,7 +60,7 @@
             </select>
           </label>
 
-          <label style="flex:1; min-width:260px">
+          <label class="grow">
             Buscar
             <input id="q" placeholder="Nombre / Teléfono / Fechas" />
           </label>
@@ -70,7 +70,22 @@
       </div>
 
       <div class="tableWrap">
-        <table class="table">
+        <table class="table ownerTable">
+          <!-- IMPORTANTÍSIMO: hace que entre a lo ancho sin scroll -->
+          <colgroup>
+            <col style="width: 9%">
+            <col style="width: 7%">
+            <col style="width: 10%">
+            <col style="width: 12%">
+            <col style="width: 6%">
+            <col style="width: 9%">
+            <col style="width: 9%">
+            <col style="width: 6%">
+            <col style="width: 8%">
+            <col style="width: 10%">
+            <col style="width: 14%">
+          </colgroup>
+
           <thead>
             <tr>
               <th>Estado</th>
@@ -86,12 +101,13 @@
               <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody id="tbody"></tbody>
         </table>
       </div>
 
       <div class="foot muted small">Tip: el WhatsApp se arma automáticamente con noches + total.</div>
-    </div>
+    </section>
   </div>
 
   <script src="owner.js"></script>
