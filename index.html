@@ -11,8 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
-
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
@@ -21,8 +19,6 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="css.css" />
-
-
 </head>
 
 <body>
@@ -40,7 +36,7 @@
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#calificaciones">Calificaciones</a></li>
         <li><a href="#contacto">Contacto</a></li>
-        <li><a href="cabañas2/index.html">Disponibilibidad</a></li>
+        <li><a href="cabañas2/index.html" class="nav-cta">Disponibilidad</a></li>
       </ul>
 
       <!-- Botón menú mobile -->
@@ -55,12 +51,12 @@
     <!-- Menú mobile -->
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
       <ul>
-        <li><a href="cabañas2/index.html" class="mobile-link">cabañas2</a></li>
+        <li><a href="#propiedades" class="mobile-link">Cabañas</a></li>
         <li><a href="#porque" class="mobile-link">¿Por qué elegirnos?</a></li>
         <li><a href="#servicios" class="mobile-link">Servicios</a></li>
         <li><a href="#calificaciones" class="mobile-link">Calificaciones</a></li>
         <li><a href="#contacto" class="mobile-link">Contacto</a></li>
-        <li><a href="#buscador" class="mobile-link cta-link">Consultar disponibilidad</a></li>
+        <li><a href="cabañas2/index.html" class="mobile-link cta-link">Consultar disponibilidad</a></li>
       </ul>
     </div>
   </header>
@@ -74,42 +70,7 @@
         Tu navegador no soporta video.
       </video>
 
-      <div class="hero-content">
-        <h1>Tu descanso en Cabañas Sol y Luna</h1>
-        <p>Atención personalizada, comodidad y un lugar pensado para disfrutar de verdad.</p>
 
-        <div class="search-box" id="buscador">
-          <form class="search-form" id="searchForm" aria-label="Consultar disponibilidad">
-            <div class="search-group">
-              <label for="checkin">Ingreso</label>
-              <input type="date" id="checkin" name="checkin" required />
-            </div>
-
-            <div class="search-group">
-              <label for="checkout">Salida</label>
-              <input type="date" id="checkout" name="checkout" required />
-            </div>
-
-            <div class="search-group">
-              <label for="guests">Personas</label>
-              <select id="guests" name="guests" required>
-                <option value="">Seleccioná</option>
-                <option value="2">2 personas</option>
-                <option value="4">4 personas</option>
-                <option value="6">6 personas</option>
-                <option value="8">8 personas</option>
-                <option value="10">10 personas</option>
-                <option value="12">12 personas</option>
-              </select>
-            </div>
-
-            <button type="submit" class="search-submit">CONSULTAR DISPONIBILIDAD</button>
-
-            <p class="search-hint">
-              Al enviar, se arma un mensaje para WhatsApp con tu consulta. La reserva se confirma cuando te respondamos.
-            </p>
-          </form>
-        </div>
       </div>
     </section>
 
@@ -118,7 +79,7 @@
       <div class="container-wide">
         <div class="section-header">
           <h2>Nuestras cabañas</h2>
-          <p>Elegí una opción y mirá las fotos.</p>
+          <p>Elegí una opción y mirá las fotos o revisá la disponibilidad.</p>
         </div>
 
         <div class="properties-grid">
@@ -128,10 +89,15 @@
             <div class="property-content">
               <h3 class="property-title">Cabaña 1</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
-              <div class="property-features">🛏 2 dorm. · 🛁 1 baño · 👥 6 pers.</div>
+              <div class="property-features">🛏 2 habitaciones · 🛁 1 baño · 👥 5 pers.</div>
+
               <div class="property-price">
                 <span class="price-amount">Consultar</span>
-                <button class="view-button" type="button" data-open-lightbox="c1">Ver Fotos</button>
+
+                <div class="card-actions">
+                  <button class="view-button" type="button" data-open-lightbox="c1">Ver fotos</button>
+                  <a class="avail-button" href="cabañas2/index.html?cabana=1">Ver disponibilidad</a>
+                </div>
               </div>
             </div>
           </article>
@@ -142,10 +108,15 @@
             <div class="property-content">
               <h3 class="property-title">Cabaña 2</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
-              <div class="property-features">🛏 1 dorm. · 🛁 1 baño · 👥 4 pers.</div>
+              <div class="property-features">🛏 2 habitaciones · 🛁 1 baño · 👥 5 pers.</div>
+
               <div class="property-price">
                 <span class="price-amount">Consultar</span>
-                <button class="view-button" type="button" data-open-lightbox="c2">Ver Fotos</button>
+
+                <div class="card-actions">
+                  <button class="view-button" type="button" data-open-lightbox="c2">Ver fotos</button>
+                  <a class="avail-button" href="cabañas2/index.html?cabana=2">Ver disponibilidad</a>
+                </div>
               </div>
             </div>
           </article>
@@ -156,13 +127,38 @@
             <div class="property-content">
               <h3 class="property-title">Cabaña 3</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
-              <div class="property-features">🛏 3 dorm. · 🛁 2 baños · 👥 10 pers.</div>
+              <div class="property-features">🛏 2 habitaciones · 🛁 1 baño · 👥 5 pers.</div>
+
               <div class="property-price">
                 <span class="price-amount">Consultar</span>
-                <button class="view-button" type="button" data-open-lightbox="c3">Ver Fotos</button>
+
+                <div class="card-actions">
+                  <button class="view-button" type="button" data-open-lightbox="c3">Ver fotos</button>
+                  <a class="avail-button" href="cabañas2/index.html?cabana=3">Ver disponibilidad</a>
+                </div>
               </div>
             </div>
           </article>
+
+          <!-- Cabaña 4 -->
+          <article class="property-card">
+            <img class="property-image" src="img/foto13.jpg" alt="Cabaña 4" loading="lazy" decoding="async">
+            <div class="property-content">
+              <h3 class="property-title">Cabaña 4</h3>
+              <div class="property-location">Cabañas Sol y Luna</div>
+              <div class="property-features">🛏 2 habitaciones · 🛁 1 baño · 👥 5 pers.</div>
+
+              <div class="property-price">
+                <span class="price-amount">Consultar</span>
+
+                <div class="card-actions">
+                  <button class="view-button" type="button" data-open-lightbox="c4">Ver fotos</button>
+                  <a class="avail-button" href="cabañas2/index.html?cabana=4">Ver disponibilidad</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
         </div>
       </div>
     </section>
@@ -226,7 +222,7 @@
             </div>
 
             <div class="why-actions">
-              <a class="btn-primary" href="#buscador">Consultar disponibilidad</a>
+              <a class="btn-primary" href="cabañas2/index.html">Consultar disponibilidad</a>
               <a class="btn-outline" href="#servicios">Ver servicios</a>
             </div>
           </div>
@@ -319,11 +315,11 @@
               WhatsApp
             </a>
 
-            <a href="cabañas2/" class="cta-form">
-  <i class="fas fa-calendar-check"></i>
-  Consultar disponibilidad
-</a>
-
+            <a href="cabañas2/index.html" class="cta-form">
+              <i class="fas fa-calendar-check"></i>
+              Consultar disponibilidad
+            </a>
+          </div>
 
           <div class="cta-final-extra">
             <span><strong>Horario:</strong> 09:00 a 20:00</span><br />
@@ -359,7 +355,7 @@
         <div class="video-card">
           <div class="video-frame">
             <video id="tourVideo" class="tour-video-player" controls playsinline preload="metadata" poster="img/foto1.jpg">
-              <source src="/img/video1.mp4" type="video/mp4" />
+              <source src="img/video1.mp4" type="video/mp4" />
               Tu navegador no soporta video.
             </video>
           </div>
@@ -479,233 +475,7 @@
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      /* =========================
-         CONFIG WHATSAPP + FECHAS
-         ========================= */
-      const WHATSAPP_NUMBER = "5493512692064";
-
-      function toISODate(d) {
-        const pad = (n) => String(n).padStart(2, "0");
-        return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-      }
-
-      const checkin = document.getElementById("checkin");
-      const checkout = document.getElementById("checkout");
-
-      const today = new Date();
-      const todayISO = toISODate(today);
-
-      if (checkin) checkin.min = todayISO;
-      if (checkout) checkout.min = todayISO;
-
-      if (checkin && checkout) {
-        checkin.addEventListener("change", () => {
-          if (!checkin.value) return;
-          const inDate = new Date(checkin.value + "T00:00:00");
-          const minOut = new Date(inDate);
-          minOut.setDate(minOut.getDate() + 1);
-          const minOutISO = toISODate(minOut);
-          checkout.min = minOutISO;
-
-          if (!checkout.value || checkout.value < minOutISO) {
-            checkout.value = minOutISO;
-          }
-        });
-      }
-
-      /* =========================
-         FORM -> WhatsApp
-         ========================= */
-      const searchForm = document.getElementById("searchForm");
-      if (searchForm) {
-        searchForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const guests = document.getElementById("guests")?.value || "";
-          const inVal = checkin?.value || "";
-          const outVal = checkout?.value || "";
-
-          const msg =
-            `Hola! Quisiera consultar disponibilidad en Cabañas Sol y Luna.\n` +
-            `Ingreso: ${inVal}\n` +
-            `Salida: ${outVal}\n` +
-            `Personas: ${guests}\n`;
-
-          const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-          window.open(url, "_blank", "noopener");
-        });
-      }
-
-      /* =========================
-         NAV MOBILE
-         ========================= */
-      const mobileNavToggle = document.getElementById("mobileNavToggle");
-      const mobileMenu = document.getElementById("mobileMenu");
-
-      function setMobileMenu(open) {
-        if (!mobileMenu || !mobileNavToggle) return;
-        mobileMenu.classList.toggle("active", open);
-        mobileMenu.setAttribute("aria-hidden", String(!open));
-        mobileNavToggle.setAttribute("aria-expanded", String(open));
-        document.body.classList.toggle("no-scroll", open);
-      }
-
-      if (mobileNavToggle) {
-        mobileNavToggle.addEventListener("click", () => {
-          const open = !mobileMenu?.classList.contains("active");
-          setMobileMenu(open);
-        });
-      }
-
-      document.querySelectorAll(".mobile-link").forEach(a => {
-        a.addEventListener("click", () => setMobileMenu(false));
-      });
-
-      window.addEventListener("resize", () => {
-        if (window.innerWidth >= 901) setMobileMenu(false);
-      });
-
-      /* =========================
-         SCROLL TOP
-         ========================= */
-      const scrollBtn = document.getElementById("scrollToTop");
-      window.addEventListener("scroll", () => {
-        if (!scrollBtn) return;
-        scrollBtn.classList.toggle("visible", window.scrollY > 600);
-      });
-      if (scrollBtn) {
-        scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-      }
-
-      /* =========================
-         COUNTERS (Calificaciones)
-         ========================= */
-      const counters = document.querySelectorAll(".counter");
-      const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target;
-          const target = parseFloat(el.dataset.target || "0");
-          const decimals = parseInt(el.dataset.decimals || "0", 10);
-          const duration = 900;
-          const start = performance.now();
-
-          function tick(t) {
-            const p = Math.min(1, (t - start) / duration);
-            const val = target * p;
-            el.textContent = val.toFixed(decimals);
-            if (p < 1) requestAnimationFrame(tick);
-          }
-          requestAnimationFrame(tick);
-          counterObserver.unobserve(el);
-        });
-      }, { threshold: 0.35 });
-
-      counters.forEach(c => counterObserver.observe(c));
-
-      /* =========================
-         LIGHTBOX (Swiper) - cierre X garantizado
-         ========================= */
-      const cabinImages = {
-        c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
-        c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
-        c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"]
-      };
-
-      let lightboxSwiper = null;
-
-      const lb = document.getElementById("lightbox");
-      const wrapper = document.getElementById("lightbox-swiper-wrapper");
-      const closeBtn = document.getElementById("closeLightboxBtn");
-      const swiperEl = document.getElementById("lightboxSwiper");
-
-      function openLightbox(cabinKey) {
-        const key = (cabinKey && cabinImages[cabinKey]) ? cabinKey : "c1";
-        if (!lb || !wrapper || !swiperEl) return;
-
-        wrapper.innerHTML = "";
-
-        cabinImages[key].forEach((src, idx) => {
-          const slide = document.createElement("div");
-          slide.className = "swiper-slide";
-          slide.innerHTML = `
-            <img src="${src}" alt="Foto ${idx + 1}" loading="eager" decoding="async" />
-          `;
-          wrapper.appendChild(slide);
-        });
-
-        lb.classList.add("active");
-        lb.setAttribute("aria-hidden", "false");
-        document.body.classList.add("no-scroll");
-
-        if (lightboxSwiper) {
-          lightboxSwiper.destroy(true, true);
-          lightboxSwiper = null;
-        }
-
-        // Inicializa Swiper luego de mostrar (evita bugs de layout)
-        requestAnimationFrame(() => {
-          lightboxSwiper = new Swiper(swiperEl, {
-            loop: false,
-            rewind: true,
-            slidesPerView: 1,
-            spaceBetween: 0,
-            watchOverflow: true,
-            observer: true,
-            observeParents: true,
-            pagination: { el: lb.querySelector(".swiper-pagination"), clickable: true },
-            navigation: { nextEl: lb.querySelector(".swiper-button-next"), prevEl: lb.querySelector(".swiper-button-prev") },
-            keyboard: { enabled: true },
-            touchStartPreventDefault: false
-          });
-          lightboxSwiper.update();
-        });
-
-        if (closeBtn) closeBtn.focus({ preventScroll: true });
-      }
-
-      function closeLightbox() {
-        if (!lb) return;
-
-        lb.classList.remove("active");
-        lb.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("no-scroll");
-
-        if (lightboxSwiper) {
-          lightboxSwiper.destroy(true, true);
-          lightboxSwiper = null;
-        }
-
-        // Limpia slides para evitar que quede “pegada” la anterior
-        if (wrapper) wrapper.innerHTML = "";
-      }
-
-      // Abrir lightbox
-      document.querySelectorAll("[data-open-lightbox]").forEach(btn => {
-        btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-open-lightbox")));
-      });
-
-      // Cierre: capturamos el evento para ganarle a Swiper (PC y móvil)
-      document.addEventListener("pointerdown", (e) => {
-        const hitClose = e.target.closest("#closeLightboxBtn");
-        if (hitClose) {
-          e.preventDefault();
-          e.stopPropagation();
-          closeLightbox();
-        }
-      }, true);
-
-      document.addEventListener("click", (e) => {
-        // clic afuera: cierra
-        if (e.target === lb) closeLightbox();
-      }, true);
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeLightbox();
-      });
-    });
-  </script>
+  <!-- JS -->
+  <script src="js.js"></script>
 </body>
 </html>
