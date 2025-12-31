@@ -1,7 +1,4 @@
-// =========================
-// JSONP
-// =========================
-function jsonp(url, timeoutMs = 8000) {
+function jsonp(url, timeoutMs = 12000) {
   return new Promise((resolve, reject) => {
     const cbName = "cb_" + Math.random().toString(36).slice(2);
     const script = document.createElement("script");
@@ -10,20 +7,13 @@ function jsonp(url, timeoutMs = 8000) {
     const cleanup = () => {
       if (done) return;
       done = true;
-      delete window[cbName];
+      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
       script.remove();
       clearTimeout(t);
     };
 
-    window[cbName] = (data) => {
-      cleanup();
-      resolve(data);
-    };
-
-    script.onerror = () => {
-      cleanup();
-      reject(new Error("JSONP error"));
-    };
+    window[cbName] = (data) => { cleanup(); resolve(data); };
+    script.onerror = () => { cleanup(); reject(new Error("JSONP error")); };
 
     const t = setTimeout(() => {
       cleanup();
@@ -41,6 +31,9 @@ function jsonp(url, timeoutMs = 8000) {
 // =========================
 const API_BASE = "https://script.google.com/macros/s/AKfycbwIxzLZlq0NIJgDfGUpMddei2MknrBwgsmCCPNtNvwaHXmhnJB-nPETBIW4d5zQzPr_/exec";
 
+// IMPORTANTE: marcar ocupado incluyendo checkout (bloque continuo)
+const INCLUDE_CHECKOUT_DAY = true;
+
 // =========================
 // HELPERS
 // =========================
@@ -54,6 +47,78 @@ function toISO(d) {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
+}
+
+function onlyDigits(s) {
+  return String(s || "").replace(/\D/g, "");
+}
+
+function isValidPhoneDigits(digits) {
+  return /^\d{10,15}$/.test(digits);
+}
+
+function toDate0(iso) {
+  const [y, m, d] = String(iso).split("-").map(Number);
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
+}
+
+// Normaliza valores de cabaña:
+// acepta "2", 2, "Cabana 2", "Cabaña 2", "CABAÑA 2", etc. -> "2"
+function cabanaId(x) {
+  const s = String(x ?? "").trim();
+  const m = s.match(/\d+/);
+  return m ? m[0] : s;
+}
+
+// Setea el <select> a la cabaña pedida (por id/label/value), si existe
+function setCabanaSelect(target) {
+  const wanted = cabanaId(target);
+  if (!wanted) return false;
+
+  // 1) match por value directo
+  for (const opt of cabanaEl.options) {
+    if (cabanaId(opt.value) === wanted) {
+      cabanaEl.value = opt.value;
+      return true;
+    }
+  }
+  // 2) match por texto visible
+  for (const opt of cabanaEl.options) {
+    if (cabanaId(opt.textContent) === wanted) {
+      cabanaEl.value = opt.value;
+      return true;
+    }
+  }
+  return false;
+}
+
+// Lee querystring y precarga cabana/personas/checkin/checkout si vienen
+function prefillFromQuery() {
+  const qs = new URLSearchParams(window.location.search);
+
+  const qCab = qs.get("cabana") || qs.get("cabaña") || qs.get("cabin") || qs.get("cabinId");
+  const qPers = qs.get("personas") || qs.get("guests");
+  const qIn = qs.get("checkin") || qs.get("ingreso");
+  const qOut = qs.get("checkout") || qs.get("salida");
+
+  if (qCab) setCabanaSelect(decodeURIComponent(qCab));
+
+  if (qPers && personasEl) {
+    // intentamos setear por value exacto; si no coincide, lo dejamos
+    const wanted = String(qPers).trim();
+    const has = [...personasEl.options].some(o => String(o.value) === wanted);
+    if (has) personasEl.value = wanted;
+  }
+
+  // OJO: flatpickr trabaja mejor con setDate
+  if (qIn && fpCheckin) {
+    const iso = String(qIn).trim();
+    fpCheckin.setDate(iso, true); // dispara onChange -> set minDate checkout
+  }
+  if (qOut && fpCheckout) {
+    const iso = String(qOut).trim();
+    fpCheckout.setDate(iso, true);
+  }
 }
 
 // =========================
@@ -75,6 +140,13 @@ const msgEl = $("msg");
 const btnEnviar = $("btnEnviar");
 const listaConfirmadas = $("listaConfirmadas");
 
+// Forzar solo números en tiempo real
+if (telefonoEl) {
+  telefonoEl.addEventListener("input", () => {
+    telefonoEl.value = onlyDigits(telefonoEl.value).slice(0, 15);
+  });
+}
+
 // =========================
 // UI helpers (colores calendario)
 // =========================
@@ -95,13 +167,42 @@ function markDayClass(dayElem, date) {
 // =========================
 // AVAILABILITY LOGIC
 // =========================
-// Ocupado si d está dentro de [checkin, checkout] (INCLUYE checkout)
 function isBooked(d) {
   const iso = toISO(d);
   for (const r of ranges) {
-    if (iso >= r.checkin && iso <= r.checkout) return true;
+    if (INCLUDE_CHECKOUT_DAY) {
+      if (iso >= r.checkin && iso <= r.checkout) return true;
+    } else {
+      if (iso >= r.checkin && iso < r.checkout) return true;
+    }
   }
   return false;
+}
+
+function rangeCrossesBooked(inDate, outDate) {
+  if (!inDate || !outDate) return false;
+
+  const start = new Date(inDate);
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(outDate);
+  end.setHours(0, 0, 0, 0);
+
+  const d = new Date(start);
+
+  if (INCLUDE_CHECKOUT_DAY) {
+    while (d <= end) {
+      if (isBooked(d)) return true;
+      d.setDate(d.getDate() + 1);
+    }
+    return false;
+  } else {
+    while (d < end) {
+      if (isBooked(d)) return true;
+      d.setDate(d.getDate() + 1);
+    }
+    return false;
+  }
 }
 
 function disableFn(date) {
@@ -110,25 +211,53 @@ function disableFn(date) {
   return false;
 }
 
-// checkout extra: no puede ser <= checkin
 function checkoutDisableFn(date) {
-  if (disableFn(date)) return true;
+  if (date < today) return true;
 
   const inDate = fpCheckin?.selectedDates?.[0];
   if (inDate && date <= inDate) return true;
 
+  if (inDate && rangeCrossesBooked(inDate, date)) {
+    if (INCLUDE_CHECKOUT_DAY) {
+      // permitir que checkout caiga en día “ocupado” si solo choca en el final
+      const d = new Date(inDate);
+      d.setHours(0, 0, 0, 0);
+      const end = new Date(date);
+      end.setHours(0, 0, 0, 0);
+      d.setDate(d.getDate() + 1);
+      while (d < end) {
+        if (isBooked(d)) return true;
+        d.setDate(d.getDate() + 1);
+      }
+      return false;
+    }
+    return true;
+  }
+
+  if (!INCLUDE_CHECKOUT_DAY) {
+    if (isBooked(date)) return true;
+  }
   return false;
 }
 
+// =========================
+// FILTROS / REFRESCOS
+// =========================
 function applyCabanaFilter() {
-  const cab = cabanaEl.value;
-  ranges = allConfirmed.filter((b) => String(b.cabana) === String(cab));
+  const cab = cabanaId(cabanaEl.value);
+  ranges = allConfirmed
+    .filter((b) => cabanaId(b.cabana) === cab)
+    .map((b) => ({
+      ...b,
+      checkin: String(b.checkin).trim(),
+      checkout: String(b.checkout).trim(),
+    }));
 }
 
 function refreshList() {
-  const cab = cabanaEl.value;
+  const cab = cabanaId(cabanaEl.value);
   const items = allConfirmed
-    .filter((b) => String(b.cabana) === String(cab))
+    .filter((b) => cabanaId(b.cabana) === cab)
     .sort((a, b) => (a.checkin > b.checkin ? 1 : -1));
 
   listaConfirmadas.innerHTML = "";
@@ -159,12 +288,14 @@ async function loadAvailability() {
   try {
     const data = await jsonp(`${API_BASE}?action=availability`);
     allConfirmed = Array.isArray(data) ? data : [];
+
     applyCabanaFilter();
     refreshList();
     refreshCalendars();
   } catch (err) {
     console.error(err);
-    msgEl.textContent = "No se pudo cargar disponibilidad (Apps Script).";
+    msgEl.textContent =
+      "No se pudo cargar disponibilidad. Revisá el deploy del WebApp (acceso: Anyone) y la URL.";
   }
 }
 
@@ -217,13 +348,21 @@ async function submitReserva(ev) {
     cabana: cabanaEl.value,
     personas: personasEl.value,
     nombre: nombreEl.value.trim(),
-    telefono: telefonoEl.value.trim(),
+    telefono: onlyDigits(telefonoEl.value.trim()),
     checkin: $("checkin").value,
     checkout: $("checkout").value
   };
 
   if (!payload.checkin || !payload.checkout) {
     msgEl.textContent = "Seleccioná check-in y check-out.";
+    return;
+  }
+  if (!payload.nombre) {
+    msgEl.textContent = "Ingresá tu nombre.";
+    return;
+  }
+  if (!isValidPhoneDigits(payload.telefono)) {
+    msgEl.textContent = "Teléfono inválido. Usá solo números (10 a 15 dígitos). Ej: 3515555555";
     return;
   }
 
@@ -255,7 +394,7 @@ async function submitReserva(ev) {
 
   } catch (err) {
     console.error(err);
-    msgEl.textContent = "No se pudo conectar con Apps Script.";
+    msgEl.textContent = "No se pudo conectar con Apps Script. Verificá URL y deploy (Anyone).";
   } finally {
     btnEnviar.disabled = false;
     await loadAvailability();
@@ -267,6 +406,11 @@ async function submitReserva(ev) {
 // =========================
 window.addEventListener("DOMContentLoaded", async () => {
   initCalendars();
+
+  // 1) preselección por URL (cabana=2, Cabana 2, Cabaña 2, etc.)
+  prefillFromQuery();
+
+  // 2) carga disponibilidad y refresca UI ya con la cabaña correcta
   await loadAvailability();
 
   cabanaEl.addEventListener("change", () => {

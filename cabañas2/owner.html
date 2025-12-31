@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel del Dueño</title>
+  <link rel="stylesheet" href="owner.css" />
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Panel del Dueño</h1>
+        <div class="muted small">Acciones: WhatsApp / Confirmar / Rechazar / Eliminar / Reset total</div>
+      </div>
+
+      <div class="row">
+        <button id="btnReload" class="btn ghost">Recargar</button>
+        <button id="btnReset" class="btn danger">Reset total</button>
+        <button id="btnLogout" class="btn ghost">Salir</button>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginBox" class="card">
+      <div class="row">
+        <label>
+          PIN
+          <input id="pin" type="password" placeholder="Ingresá tu PIN" />
+        </label>
+        <button id="btnLogin" class="btn">Entrar</button>
+      </div>
+      <div id="loginMsg" class="msg"></div>
+    </div>
+
+    <!-- PANEL -->
+    <div id="panel" class="card hidden">
+      <div class="filters">
+        <div class="row">
+          <label>
+            Cabaña
+            <select id="fCabana">
+              <option value="">Todas</option>
+              <option value="Cabana 1">Cabana 1</option>
+              <option value="Cabana 2">Cabana 2</option>
+              <option value="Cabana 3">Cabana 3</option>
+              <option value="Cabana 4">Cabana 4</option>
+            </select>
+          </label>
+
+          <label>
+            Estado
+            <select id="fEstado">
+              <option value="">Todos</option>
+              <option value="PENDIENTE">PENDIENTE</option>
+              <option value="CONFIRMADA">CONFIRMADA</option>
+              <option value="RECHAZADA">RECHAZADA</option>
+              <option value="CANCELADA">CANCELADA</option>
+            </select>
+          </label>
+
+          <label style="flex:1; min-width:260px">
+            Buscar
+            <input id="q" placeholder="Nombre / Teléfono / Fechas" />
+          </label>
+        </div>
+
+        <div id="statusLine" class="muted"></div>
+      </div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Estado</th>
+              <th>Cabaña</th>
+              <th>Nombre</th>
+              <th>Teléfono</th>
+              <th>Personas</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Noches</th>
+              <th>Total</th>
+              <th>Creado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="foot muted small">Tip: el WhatsApp se arma automáticamente con noches + total.</div>
+    </div>
+  </div>
+
+  <script src="owner.js"></script>
+</body>
+</html>
