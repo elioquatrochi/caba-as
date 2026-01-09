@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panel del Dueño</title>
-  <link rel="stylesheet" href="owner.css" />
+  <link rel="stylesheet" href="owner.css?v=20260108-2" />
 </head>
 
 <body>
@@ -12,7 +12,8 @@
     <header class="top">
       <div class="topLeft">
         <h1>Panel del Dueño</h1>
-        <div class="muted small">Acciones: WhatsApp / Confirmar / Rechazar / Eliminar / Reset total</div>
+        
+ 
       </div>
 
       <div class="topActions">
@@ -71,21 +72,6 @@
 
       <div class="tableWrap">
         <table class="table ownerTable">
-          <!-- IMPORTANTÍSIMO: hace que entre a lo ancho sin scroll -->
-          <colgroup>
-            <col style="width: 9%">
-            <col style="width: 7%">
-            <col style="width: 10%">
-            <col style="width: 12%">
-            <col style="width: 6%">
-            <col style="width: 9%">
-            <col style="width: 9%">
-            <col style="width: 6%">
-            <col style="width: 8%">
-            <col style="width: 10%">
-            <col style="width: 14%">
-          </colgroup>
-
           <thead>
             <tr>
               <th>Estado</th>
@@ -101,12 +87,13 @@
               <th>Acciones</th>
             </tr>
           </thead>
-
           <tbody id="tbody"></tbody>
         </table>
       </div>
 
-      <div class="foot muted small">Tip: el WhatsApp se arma automáticamente con noches + total.</div>
+      <div class="foot muted small">
+        Tip: el total se toma del backend (Código.gs). Si 4 noches = $300.000, estás OK.
+      </div>
     </section>
   </div>
 
