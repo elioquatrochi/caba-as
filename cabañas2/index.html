@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
   <!-- CSS -->
-  <link rel="stylesheet" href="./css.css?v=31" />
+  <link rel="stylesheet" href="./css.css?v=20260108-1" />
 </head>
 
 <body>
@@ -19,7 +19,8 @@
     <div class="brand">
       <div class="brand-title">Calendario de Reservas</div>
       <div class="brand-sub">
-        Las fechas anteriores a hoy quedan bloqueadas. Las reservas confirmadas aparecen en rojo.
+        Las fechas anteriores a hoy quedan bloqueadas. Las reservas confirmadas aparecen en rojo (por noche).
+        <b>El día de check-out queda disponible</b>.
       </div>
     </div>
 
@@ -89,14 +90,6 @@
                 <input id="checkout" type="text" placeholder="Seleccioná fecha" readonly />
               </div>
 
-              <!-- Precio -->
-              <div id="priceBox" class="priceBox span2" hidden>
-                <div class="priceRow"><span>Noches</span><b id="pNoches">0</b></div>
-                <div class="priceRow"><span>Precio por noche</span><b id="pRate">$0</b></div>
-                <div class="priceRow total"><span>Total</span><b id="pTotal">$0</b></div>
-                <div class="priceHint" id="pHint"></div>
-              </div>
-
               <div class="span2">
                 <button id="btnEnviar" type="submit" class="btnPrimary">Enviar solicitud</button>
                 <div id="msg" class="msg"></div>
@@ -113,7 +106,7 @@
       <section class="card">
         <div class="cardHead">
           <h2>Disponibilidad</h2>
-          <p class="sub">Calendario (bloquea pasado + confirmadas)</p>
+          <p class="sub">Calendario (bloquea pasado + confirmadas por noche)</p>
         </div>
 
         <div class="cardBody">
@@ -133,6 +126,9 @@
                 <div class="listHint">(cabaña seleccionada)</div>
               </div>
               <ul id="listaConfirmadas" class="list"></ul>
+              <div class="muted small" style="margin-top:.5rem">
+                Nota: el calendario pinta <b>por noche</b>. El día de check-out queda libre.
+              </div>
             </div>
 
           </div>
@@ -146,6 +142,6 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
   <!-- JS -->
-  <script src="./js.js?v=31"></script>
+  <script src="./js.js?v=20260108-1"></script>
 </body>
 </html>

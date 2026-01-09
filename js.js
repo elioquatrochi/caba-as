@@ -1,256 +1,388 @@
-/* =========================
-   HELPERS
-   ========================= */
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+// =========================
+// JSONP
+// =========================
+function jsonp(url, timeoutMs = 12000) {
+  return new Promise((resolve, reject) => {
+    const cbName = "cb_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
+    let done = false;
 
-/* =========================
-   HEADER SCROLL EFFECT
-   ========================= */
-(function headerScroll(){
-  const header = $("#header");
-  if(!header) return;
+    const cleanup = () => {
+      if (done) return;
+      done = true;
+      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+      script.remove();
+      clearTimeout(t);
+    };
 
-  const onScroll = () => {
-    if (window.scrollY > 8) header.classList.add("is-scrolled");
-    else header.classList.remove("is-scrolled");
-  };
+    window[cbName] = (data) => { cleanup(); resolve(data); };
+    script.onerror = () => { cleanup(); reject(new Error("JSONP error")); };
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-})();
+    const t = setTimeout(() => {
+      cleanup();
+      reject(new Error("JSONP timeout (no callback)"));
+    }, timeoutMs);
 
-/* =========================
-   MOBILE MENU
-   ========================= */
-(function mobileMenu(){
-  const toggle = $("#mobileNavToggle");
-  const menu = $("#mobileMenu");
-  if(!toggle || !menu) return;
-
-  const setState = (open) => {
-    menu.classList.toggle("is-open", open);
-    menu.setAttribute("aria-hidden", String(!open));
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.innerHTML = open ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-  };
-
-  toggle.addEventListener("click", () => {
-    const open = !menu.classList.contains("is-open");
-    setState(open);
+    const sep = url.includes("?") ? "&" : "?";
+    script.src = `${url}${sep}callback=${cbName}`;
+    document.body.appendChild(script);
   });
+}
 
-  $$(".mobile-link", menu).forEach(a => {
-    a.addEventListener("click", () => setState(false));
-  });
+// =========================
+// CONFIG (PRECIOS / POLÍTICAS)
+// =========================
+const API_BASE = "https://script.google.com/macros/s/AKfycbwIxzLZlq0NIJgDfGUpMddei2MknrBwgsmCCPNtNvwaHXmhnJB-nPETBIW4d5zQzPr_/exec";
 
-  document.addEventListener("keydown", (e) => {
-    if(e.key === "Escape") setState(false);
-  });
-})();
+// < 3 noches => 85.000 / noche
+// >= 3 noches => 75.000 / noche
+const RATE_SHORT = 85000;
+const RATE_LONG  = 75000;
+const LONG_FROM_NIGHTS = 3;
 
-/* =========================
-   SCROLL TO TOP
-   ========================= */
-(function scrollTop(){
-  const btn = $("#scrollToTop");
-  if(!btn) return;
+const DEPOSIT_PCT = 0.50;
+const REMINDER_TEXT = "Recordatorio: Llevar ropa blanca.";
 
-  const onScroll = () => {
-    btn.classList.toggle("is-visible", window.scrollY > 500);
-  };
+// =========================
+// HELPERS
+// =========================
+const $ = (id) => document.getElementById(id);
 
-  btn.addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-})();
+function toISO(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function isoToDate0(iso) {
+  const [y, m, d] = String(iso).split("-").map(Number);
+  return new Date(y, m - 1, d, 0, 0, 0, 0);
+}
+function onlyDigits(s) {
+  return String(s || "").replace(/\D/g, "");
+}
+function isValidPhoneDigits(digits) {
+  return /^\d{10,15}$/.test(digits);
+}
+function money(n) {
+  const v = Math.round(Number(n || 0));
+  return v.toLocaleString("es-AR");
+}
+function diffNights(checkinISO, checkoutISO) {
+  const a = isoToDate0(checkinISO);
+  const b = isoToDate0(checkoutISO);
+  return Math.max(0, Math.round((b - a) / 86400000)); // días = noches
+}
+function rateForNights(n) {
+  return (n >= LONG_FROM_NIGHTS) ? RATE_LONG : RATE_SHORT;
+}
 
-/* =========================
-   HERO SWIPER (flechas + autoplay)
-   ========================= */
-(function heroSwiperInit(){
-  const el = $("#heroSwiper");
-  if(!el || typeof Swiper === "undefined") return;
+// Normaliza cabaña: "Cabana 3" / "Cabaña 3" / 3 -> "3"
+function cabanaId(x) {
+  const s = String(x ?? "").trim();
+  const m = s.match(/\d+/);
+  return m ? m[0] : s;
+}
 
-  new Swiper("#heroSwiper", {
-    loop: true,
-    speed: 900,
-    effect: "slide",
-    autoplay: {
-      delay: 3000,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true
-    },
-    pagination: {
-      el: ".hero-pagination",
-      clickable: true
-    },
-    navigation: {
-      nextEl: ".hero-next",
-      prevEl: ".hero-prev"
-    },
-    keyboard: { enabled: true },
-    grabCursor: true
-  });
-})();
+// =========================
+// STATE
+// =========================
+let allConfirmed = []; // confirmadas global
+let ranges = [];       // confirmadas filtradas por cabaña
 
-/* =========================
-   LIGHTBOX (Swiper)
-   ========================= */
-(function lightboxInit(){
-  const lightbox = $("#lightbox");
-  const closeBtn = $("#closeLightboxBtn");
-  const wrapper = $("#lightbox-swiper-wrapper");
-  if(!lightbox || !closeBtn || !wrapper || typeof Swiper === "undefined") return;
+let fpCheckin, fpCheckout, fpInline;
 
-  // Editá estas galerías con tus fotos reales:
-  const GALLERIES = {
-    c1: ["img/foto1.jpg","img/foto2.jpg","img/foto3.jpg","img/foto4.jpg"],
-    c2: ["img/foto5.jpg","img/foto6.jpg","img/foto7.jpg","img/foto8.jpg"],
-    c3: ["img/foto9.jpg","img/foto10.jpg","img/foto11.jpg","img/foto12.jpg"],
-    c4: ["img/foto13.jpg","img/foto14.jpg","img/foto15.jpg","img/foto16.jpg"]
-  };
+// =========================
+// DOM
+// =========================
+const cabanaEl = $("cabana");
+const personasEl = $("personas");
+const nombreEl = $("nombre");
+const telefonoEl = $("telefono");
+const msgEl = $("msg");
+const btnEnviar = $("btnEnviar");
+const listaConfirmadas = $("listaConfirmadas");
 
-  let swiper = null;
+// Precio UI
+const priceBox = $("priceBox");
+const pNoches = $("pNoches");
+const pRate = $("pRate");
+const pTotal = $("pTotal");
+const pDeposit = $("pDeposit");
+const pHint = $("pHint");
 
-  const open = (key) => {
-    const imgs = GALLERIES[key] || [];
-    wrapper.innerHTML = imgs.map(src => `
-      <div class="swiper-slide">
-        <img src="${src}" alt="Foto de ${key}" loading="lazy" decoding="async">
-      </div>
-    `).join("");
+telefonoEl?.addEventListener("input", () => {
+  telefonoEl.value = onlyDigits(telefonoEl.value).slice(0, 15);
+});
 
-    lightbox.classList.add("is-open");
-    lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+// =========================
+// PINTADO CALENDARIO (por noches)
+// =========================
+// Ocupado si iso está en [checkin, checkout) => checkout NO ocupa
+function isBooked(d) {
+  const iso = toISO(d);
+  for (const r of ranges) {
+    if (iso >= r.checkin && iso < r.checkout) return true;
+  }
+  return false;
+}
 
-    if(swiper){
-      swiper.update();
-      swiper.slideTo(0, 0);
-    } else {
-      swiper = new Swiper("#lightboxSwiper", {
-        loop: true,
-        speed: 650,
-        pagination: { el: "#lightboxSwiper .swiper-pagination", clickable: true },
-        navigation: {
-          nextEl: "#lightboxSwiper .swiper-button-next",
-          prevEl: "#lightboxSwiper .swiper-button-prev"
-        },
-        keyboard: { enabled: true },
-        grabCursor: true
-      });
+function markDayClass(dayElem, date) {
+  dayElem.classList.remove("day-past", "day-booked", "day-free");
+
+  if (date < today) return dayElem.classList.add("day-past");
+  if (isBooked(date)) return dayElem.classList.add("day-booked");
+  dayElem.classList.add("day-free");
+}
+
+function disableCheckin(date) {
+  if (date < today) return true;
+  // checkin no puede caer en una noche ocupada
+  if (isBooked(date)) return true;
+  return false;
+}
+
+// Para checkout: permitir que sea un día “ocupado” por otra reserva (ej checkout = otro checkin),
+// siempre que NO cruce noches ocupadas en el medio.
+function rangeCrossesBooked(inDate, outDate) {
+  if (!inDate || !outDate) return false;
+
+  const d = new Date(inDate); d.setHours(0,0,0,0);
+  const end = new Date(outDate); end.setHours(0,0,0,0);
+
+  // noches: [inDate, outDate) => NO incluye el día outDate
+  while (d < end) {
+    if (isBooked(d)) return true;
+    d.setDate(d.getDate() + 1);
+  }
+  return false;
+}
+
+function disableCheckout(date) {
+  if (date < today) return true;
+
+  const inDate = fpCheckin?.selectedDates?.[0];
+  if (!inDate) return false;
+
+  // checkout debe ser > checkin (mínimo 1 noche)
+  if (date <= inDate) return true;
+
+  // bloquea si hay noches ocupadas entre medio
+  if (rangeCrossesBooked(inDate, date)) return true;
+
+  return false;
+}
+
+// =========================
+// LISTA + REFRESCOS
+// =========================
+function applyCabanaFilter() {
+  const cab = cabanaId(cabanaEl.value);
+  ranges = allConfirmed
+    .filter((b) => cabanaId(b.cabana) === cab)
+    .map((b) => ({
+      checkin: String(b.checkin).trim(),
+      checkout: String(b.checkout).trim(),
+      personas: String(b.personas ?? "").trim(),
+      cabana: b.cabana
+    }));
+}
+
+function refreshList() {
+  const cab = cabanaId(cabanaEl.value);
+  const items = allConfirmed
+    .filter((b) => cabanaId(b.cabana) === cab)
+    .sort((a, b) => (a.checkin > b.checkin ? 1 : -1));
+
+  listaConfirmadas.innerHTML = "";
+
+  if (!items.length) {
+    listaConfirmadas.innerHTML = `<li class="muted">No hay reservas confirmadas.</li>`;
+    return;
+  }
+
+  for (const b of items) {
+    const li = document.createElement("li");
+    li.innerHTML = `<b>${b.checkin}</b> → <b>${b.checkout}</b><br><span class="muted">Personas: ${b.personas}</span>`;
+    listaConfirmadas.appendChild(li);
+  }
+}
+
+function refreshCalendars() {
+  fpCheckin?.set("disable", [disableCheckin]);
+  fpCheckout?.set("disable", [disableCheckout]);
+  fpInline?.set("disable", [disableCheckin]);
+
+  fpInline?.redraw();
+  fpCheckin?.redraw();
+  fpCheckout?.redraw();
+}
+
+// =========================
+// PRECIO UI
+// =========================
+function updatePriceBox() {
+  const inISO = $("checkin")?.value;
+  const outISO = $("checkout")?.value;
+
+  if (!inISO || !outISO) {
+    priceBox.hidden = true;
+    return;
+  }
+
+  const nights = diffNights(inISO, outISO);
+  if (nights <= 0) {
+    priceBox.hidden = true;
+    return;
+  }
+
+  const rate = rateForNights(nights);
+  const total = nights * rate;
+  const deposit = total * DEPOSIT_PCT;
+
+  pNoches.textContent = String(nights);
+  pRate.textContent = `$${money(rate)}`;
+  pTotal.textContent = `$${money(total)}`;
+  pDeposit.textContent = `$${money(deposit)}`;
+  pHint.textContent = `${REMINDER_TEXT} Para reservar: seña del 50% del total.`;
+
+  priceBox.hidden = false;
+}
+
+// =========================
+// LOAD AVAILABILITY
+// =========================
+async function loadAvailability() {
+  try {
+    const data = await jsonp(`${API_BASE}?action=availability`);
+    allConfirmed = Array.isArray(data) ? data : [];
+
+    applyCabanaFilter();
+    refreshList();
+    refreshCalendars();
+  } catch (err) {
+    console.error(err);
+    msgEl.textContent = "No se pudo cargar disponibilidad (Apps Script). Revisá URL y Deploy (Anyone).";
+  }
+}
+
+// =========================
+// CALENDARS INIT
+// =========================
+function initCalendars() {
+  fpCheckin = flatpickr("#checkin", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [disableCheckin],
+    onDayCreate: (_, __, ___, dayElem) => markDayClass(dayElem, dayElem.dateObj),
+    onChange: (selectedDates) => {
+      const d = selectedDates[0];
+      if (!d) return;
+
+      // checkout mínimo = checkin + 1 día (1 noche)
+      const minOut = new Date(d);
+      minOut.setDate(minOut.getDate() + 1);
+      fpCheckout.set("minDate", minOut);
+
+      const currentOut = fpCheckout.selectedDates[0];
+      if (currentOut && currentOut <= d) fpCheckout.clear();
+
+      updatePriceBox();
     }
+  });
+
+  fpCheckout = flatpickr("#checkout", {
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [disableCheckout],
+    onDayCreate: (_, __, ___, dayElem) => markDayClass(dayElem, dayElem.dateObj),
+    onChange: () => updatePriceBox()
+  });
+
+  fpInline = flatpickr("#calInline", {
+    inline: true,
+    dateFormat: "Y-m-d",
+    minDate: today,
+    disable: [disableCheckin],
+    onDayCreate: (_, __, ___, dayElem) => markDayClass(dayElem, dayElem.dateObj),
+  });
+}
+
+// =========================
+// SUBMIT RESERVA (cliente)
+// =========================
+async function submitReserva(ev) {
+  ev.preventDefault();
+  msgEl.textContent = "";
+
+  const payload = {
+    cabana: cabanaEl.value,
+    personas: personasEl.value,
+    nombre: nombreEl.value.trim(),
+    telefono: onlyDigits(telefonoEl.value.trim()),
+    checkin: $("checkin").value,
+    checkout: $("checkout").value
   };
 
-  const close = () => {
-    lightbox.classList.remove("is-open");
-    lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  };
+  if (!payload.checkin || !payload.checkout) return (msgEl.textContent = "Seleccioná check-in y check-out.");
+  if (!payload.nombre) return (msgEl.textContent = "Ingresá tu nombre.");
+  if (!isValidPhoneDigits(payload.telefono)) return (msgEl.textContent = "Teléfono inválido. Usá 10 a 15 dígitos. Ej: 3515555555");
 
-  // botones "Ver fotos"
-  $$("[data-open-lightbox]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const key = btn.getAttribute("data-open-lightbox");
-      open(key);
+  // Validación por noches: checkout tiene que ser >= checkin + 1
+  const nights = diffNights(payload.checkin, payload.checkout);
+  if (nights < 1) return (msgEl.textContent = "La reserva debe ser mínimo de 1 noche.");
+
+  btnEnviar.disabled = true;
+  msgEl.textContent = "Enviando solicitud…";
+
+  try {
+    const qs = new URLSearchParams({
+      action: "create",
+      cabana: payload.cabana,
+      personas: payload.personas,
+      nombre: payload.nombre,
+      telefono: payload.telefono,
+      checkin: payload.checkin,
+      checkout: payload.checkout
     });
+
+    const res = await jsonp(`${API_BASE}?${qs.toString()}`);
+
+    if (!res || !res.ok) {
+      msgEl.textContent = (res && res.error) ? res.error : "Error al enviar solicitud.";
+      return;
+    }
+
+    msgEl.textContent = "ENVIADO. Te vamos a contactar para confirmar disponibilidad y forma de pago.";
+    $("formReserva").reset();
+    fpCheckin.clear();
+    fpCheckout.clear();
+    updatePriceBox();
+
+  } catch (err) {
+    console.error(err);
+    msgEl.textContent = "No se pudo conectar con Apps Script. Verificá URL y Deploy (Anyone).";
+  } finally {
+    btnEnviar.disabled = false;
+    await loadAvailability();
+  }
+}
+
+// =========================
+// BOOT
+// =========================
+window.addEventListener("DOMContentLoaded", async () => {
+  initCalendars();
+  await loadAvailability();
+
+  cabanaEl.addEventListener("change", () => {
+    applyCabanaFilter();
+    refreshList();
+    refreshCalendars();
   });
 
-  closeBtn.addEventListener("click", close);
-
-  // cerrar tocando el fondo (no el swiper)
-  lightbox.addEventListener("click", (e) => {
-    if(e.target === lightbox) close();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if(e.key === "Escape" && lightbox.classList.contains("is-open")) close();
-  });
-})();
-
-/* =========================
-   REVIEWS: autoplay + flechas (PC) + loop
-   ========================= */
-(function reviewsCarousel(){
-  const track = $("#reviewsTrack");
-  const prevBtn = $(".sl-nav-prev");
-  const nextBtn = $(".sl-nav-next");
-  if(!track || !prevBtn || !nextBtn) return;
-
-  // cantidad a desplazar por click (aprox 1 card)
-  const getStep = () => {
-    const first = track.querySelector(".sl-review");
-    if(!first) return 320;
-    const styles = getComputedStyle(track);
-    const gap = parseInt(styles.columnGap || styles.gap || "14", 10) || 14;
-    return first.getBoundingClientRect().width + gap;
-  };
-
-  const scrollByStep = (dir) => {
-    const step = getStep() * dir;
-    track.scrollBy({ left: step, behavior: "smooth" });
-  };
-
-  prevBtn.addEventListener("click", () => scrollByStep(-1));
-  nextBtn.addEventListener("click", () => scrollByStep(1));
-
-  // autoplay
-  let autoplayId = null;
-  const start = () => {
-    stop();
-    autoplayId = setInterval(() => {
-      const max = track.scrollWidth - track.clientWidth;
-
-      // Si está al final, volvemos al inicio (loop)
-      if(track.scrollLeft >= max - 8){
-        track.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        scrollByStep(1);
-      }
-    }, 2600);
-  };
-
-  const stop = () => {
-    if(autoplayId) clearInterval(autoplayId);
-    autoplayId = null;
-  };
-
-  // pausa al pasar el mouse (PC) y al tocar/arrastrar
-  track.addEventListener("mouseenter", stop);
-  track.addEventListener("mouseleave", start);
-
-  let isPointerDown = false;
-  track.addEventListener("pointerdown", () => { isPointerDown = true; stop(); });
-  track.addEventListener("pointerup", () => { isPointerDown = false; start(); });
-  track.addEventListener("pointercancel", () => { isPointerDown = false; start(); });
-
-  // arrastre simple (mejor UX en PC)
-  let startX = 0;
-  let startScroll = 0;
-
-  track.addEventListener("mousedown", (e) => {
-    isPointerDown = true;
-    startX = e.pageX;
-    startScroll = track.scrollLeft;
-    track.classList.add("is-dragging");
-  });
-
-  window.addEventListener("mouseup", () => {
-    if(!isPointerDown) return;
-    isPointerDown = false;
-    track.classList.remove("is-dragging");
-  });
-
-  window.addEventListener("mousemove", (e) => {
-    if(!isPointerDown) return;
-    const dx = e.pageX - startX;
-    track.scrollLeft = startScroll - dx;
-  });
-
-  // iniciar autoplay
-  start();
-})();
+  $("formReserva").addEventListener("submit", submitReserva);
+});
