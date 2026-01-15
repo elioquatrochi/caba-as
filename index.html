@@ -24,40 +24,42 @@
 <body>
   <!-- Header -->
   <header class="header" id="header">
-    <nav class="nav" aria-label="Navegación principal">
-      <a href="#hero" class="logo" aria-label="Inicio Cabañas Sol y Luna">
-        <img src="img/logo-solyluna.svg" alt="Cabañas Sol y Luna" />
-      </a>
+    <div class="container">
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#hero" class="logo" aria-label="Inicio Cabañas Sol y Luna">
+          <img src="img/logo-solyluna.svg" alt="Cabañas Sol y Luna" />
+        </a>
 
-      <!-- Desktop links -->
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#propiedades">Cabañas</a></li>
-        <li><a href="#porque">¿Por qué elegirnos?</a></li>
-        <li><a href="#servicios">Servicios</a></li>
-        <li><a href="#calificaciones">Calificaciones</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li><a href="cabañas2/index.html" class="nav-cta">Disponibilidad</a></li>
-      </ul>
+        <!-- Desktop links -->
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#propiedades">Cabañas</a></li>
+          <li><a href="#porque">¿Por qué elegirnos?</a></li>
+          <li><a href="#servicios">Servicios</a></li>
+          <li><a href="#calificaciones">Calificaciones</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="cabañas2/index.html" class="nav-cta">Disponibilidad</a></li>
+        </ul>
 
-      <!-- Botón menú mobile -->
-      <div class="nav-actions">
-        <button class="mobile-nav-toggle" id="mobileNavToggle"
-          aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu" type="button">
-          <i class="fas fa-bars"></i>
-        </button>
+        <!-- Botón menú mobile -->
+        <div class="nav-actions">
+          <button class="mobile-nav-toggle" id="mobileNavToggle"
+            aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu" type="button">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Menú mobile -->
+      <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <ul>
+          <li><a href="#propiedades" class="mobile-link">Cabañas</a></li>
+          <li><a href="#porque" class="mobile-link">¿Por qué elegirnos?</a></li>
+          <li><a href="#servicios" class="mobile-link">Servicios</a></li>
+          <li><a href="#calificaciones" class="mobile-link">Calificaciones</a></li>
+          <li><a href="#contacto" class="mobile-link">Contacto</a></li>
+          <li><a href="cabañas2/index.html" class="mobile-link cta-link">Consultar disponibilidad</a></li>
+        </ul>
       </div>
-    </nav>
-
-    <!-- Menú mobile -->
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-      <ul>
-        <li><a href="#propiedades" class="mobile-link">Cabañas</a></li>
-        <li><a href="#porque" class="mobile-link">¿Por qué elegirnos?</a></li>
-        <li><a href="#servicios" class="mobile-link">Servicios</a></li>
-        <li><a href="#calificaciones" class="mobile-link">Calificaciones</a></li>
-        <li><a href="#contacto" class="mobile-link">Contacto</a></li>
-        <li><a href="cabañas2/index.html" class="mobile-link cta-link">Consultar disponibilidad</a></li>
-      </ul>
     </div>
   </header>
 
@@ -66,10 +68,10 @@
     <section class="hero" id="hero" aria-label="Portada">
       <div class="swiper hero-swiper" id="heroSwiper" aria-label="Carrusel principal">
         <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="img/foto1.jpg" alt="Cabañas Sol y Luna - Foto 1" loading="eager" decoding="async"></div>
-          <div class="swiper-slide"><img src="img/foto10.jpg" alt="Cabañas Sol y Luna - Foto 2" loading="eager" decoding="async"></div>
-          <div class="swiper-slide"><img src="img/foto11.jpg" alt="Cabañas Sol y Luna - Foto 3" loading="eager" decoding="async"></div>
-          <div class="swiper-slide"><img src="img/foto16.jpg" alt="Cabañas Sol y Luna - Foto 4" loading="eager" decoding="async"></div>
+          <div class="swiper-slide"><img src="img/fotoPatio1.jpeg" alt="Cabañas Sol y Luna - Foto 1" loading="eager" decoding="async"></div>
+          <div class="swiper-slide"><img src="img/fotopatio2.jpeg" alt="Cabañas Sol y Luna - Foto 2" loading="eager" decoding="async"></div>
+          <div class="swiper-slide"><img src="img/fotopatio3.jpeg" alt="Cabañas Sol y Luna - Foto 3" loading="eager" decoding="async"></div>
+       
         </div>
 
         <div class="swiper-pagination hero-pagination"></div>
@@ -97,7 +99,7 @@
             <i class="fas fa-calendar-check"></i>
             Consultar disponibilidad
           </a>
-          <a class="btn-outline btn-outline--dark" href="https://wa.me/5493512692064" target="_blank" rel="noopener">
+          <a class="btn-outline btn-outline--dark" href="https://wa.me/5493512173571" target="_blank" rel="noopener">
             <i class="fab fa-whatsapp"></i>
             WhatsApp
           </a>
@@ -122,7 +124,7 @@
 
         <div class="properties-grid">
           <article class="property-card">
-            <img class="property-image" src="img/foto1.jpg" alt="Cabaña 1" loading="lazy" decoding="async">
+            <img class="property-image" src="img/foto1.jpeg" alt="Cabaña 1" loading="lazy" decoding="async">
             <div class="property-content">
               <h3 class="property-title">Cabaña 1</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
@@ -139,7 +141,7 @@
           </article>
 
           <article class="property-card">
-            <img class="property-image" src="img/foto5.jpg" alt="Cabaña 2" loading="lazy" decoding="async">
+            <img class="property-image" src="img/foto4.jpeg" alt="Cabaña 2" loading="lazy" decoding="async">
             <div class="property-content">
               <h3 class="property-title">Cabaña 2</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
@@ -156,7 +158,7 @@
           </article>
 
           <article class="property-card">
-            <img class="property-image" src="img/foto9.jpg" alt="Cabaña 3" loading="lazy" decoding="async">
+            <img class="property-image" src="img/foto17.jpeg" alt="Cabaña 3" loading="lazy" decoding="async">
             <div class="property-content">
               <h3 class="property-title">Cabaña 3</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
@@ -173,7 +175,7 @@
           </article>
 
           <article class="property-card">
-            <img class="property-image" src="img/foto13.jpg" alt="Cabaña 4" loading="lazy" decoding="async">
+            <img class="property-image" src="img/foto27.jpeg" alt="Cabaña 4" loading="lazy" decoding="async">
             <div class="property-content">
               <h3 class="property-title">Cabaña 4</h3>
               <div class="property-location">Cabañas Sol y Luna</div>
@@ -194,7 +196,7 @@
 
     <div class="sep-soft" aria-hidden="true"></div>
 
-    <!-- ¿POR QUÉ ELEGIRNOS? + VIDEO EN CUADRO DERECHO -->
+    <!-- ¿POR QUÉ ELEGIRNOS? + VIDEO -->
     <section id="porque" class="sl-section sl-why">
       <div class="sl-container">
         <header class="sl-head">
@@ -255,7 +257,7 @@
             </div>
 
             <div class="sl-video">
-              <video class="sl-video-el" controls playsinline preload="metadata" poster="img/foto1.jpg">
+              <video class="sl-video-el" controls playsinline preload="metadata" poster="img/foto1.jpeg">
                 <source src="img/video1.mp4" type="video/mp4" />
                 Tu navegador no soporta video HTML5.
               </video>
@@ -272,7 +274,7 @@
 
     <div class="sep-soft" aria-hidden="true"></div>
 
-    <!-- SERVICIOS + UBICACIÓN (ARRIBA) + MAPA ABAJO A LO ANCHO -->
+    <!-- SERVICIOS + UBICACIÓN + MAPA -->
     <section id="servicios" class="sl-section sl-services">
       <div class="sl-container">
         <header class="sl-head">
@@ -288,19 +290,18 @@
               <ul class="sl-list">
                 <li>📶 Wi-Fi</li>
                 <li>📺 TV</li>
-                <li>🔥 Calefacción <small></small></li>
+                <li>🔥 Calefacción</li>
                 <li>🍳 Cocina equipada</li>
                 <li>🌡️ Microondas</li>
-               <li>⭐ Atención personalizada</li>
+                <li>⭐ Atención personalizada</li>
               </ul>
 
               <ul class="sl-list">
-                <li>🚗 Cochera <small></small></li>
+                <li>🚗 Cochera</li>
                 <li>👶 Cunas <small>(consultar)</small></li>
                 <li>🪑 Reposeras</li>
-                <li>🥩 Asador <small></small></li>
+                <li>🥩 Asador</li>
                 <li>🧼 Limpieza <small>(consultar)</small></li>
-                
               </ul>
             </div>
 
@@ -317,11 +318,11 @@
 
             <div class="sl-contact">
               <div class="sl-contact-item"><span>📍</span> <strong>Potrero de Garay, Córdoba</strong></div>
-              <div class="sl-contact-item"><span>📞</span> <span>+54 9 3512 692064</span></div>
-              <div class="sl-contact-item"><span>💬</span> <span>WhatsApp: 5493512692064</span></div>
+              <div class="sl-contact-item"><span>📞</span> <span>+54 9 3512 173571</span></div>
+              <div class="sl-contact-item"><span>💬</span> <span>WhatsApp: 5493512173571</span></div>
             </div>
 
-            <a class="sl-btn sl-btn-primary sl-btn-full" href="https://wa.me/5493512692064" target="_blank" rel="noopener">
+            <a class="sl-btn sl-btn-primary sl-btn-full" href="https://wa.me/5493512173571" target="_blank" rel="noopener">
               Consultar por WhatsApp
             </a>
 
@@ -346,7 +347,8 @@
               title="Mapa Potrero de Garay"
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3412.9402918590796!2d-64.534!3d-31.402!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x942d7a1b6b2d2b5f%3A0x1111111111111111!2sPotrero%20de%20Garay%2C%20C%C3%B3rdoba!5e0!3m2!1ses-419!2sar!4v1735600000000"
+              src="https://www.google.com/maps?q=-31.8245087,-64.5560303&z=17&hl=es&output=embed"
+
               allowfullscreen=""
             ></iframe>
           </div>
@@ -384,7 +386,7 @@
           </article>
         </div>
 
-        <div class="sl-reviews sl-card">
+        <div class="sl-reviews sl-card" id="reviewsBox">
           <div class="sl-reviews-top">
             <h3>Reseñas destacadas</h3>
             <div class="sl-reviews-actions">
@@ -397,7 +399,7 @@
           <div class="sl-reviews-fade sl-reviews-fade-left" aria-hidden="true"></div>
           <div class="sl-reviews-fade sl-reviews-fade-right" aria-hidden="true"></div>
 
-          <div class="sl-reviews-track" id="reviewsTrack">
+          <div class="sl-reviews-track" id="reviewsTrack" aria-label="Carrusel de reseñas">
             <article class="sl-review">
               <div class="sl-review-head">
                 <div class="sl-avatar">🙂</div>
@@ -482,7 +484,7 @@
           <p>Escribinos por WhatsApp y te respondemos con disponibilidad y opciones.</p>
 
           <div class="cta-final-actions">
-            <a href="https://wa.me/5493512692064" target="_blank" class="cta-wsp" rel="noopener">
+            <a href="https://wa.me/5493512173571" target="_blank" class="cta-wsp" rel="noopener">
               <i class="fab fa-whatsapp"></i>
               WhatsApp
             </a>
@@ -502,8 +504,8 @@
         <div class="cta-final-box">
           <h4>Datos</h4>
           <ul>
-            <li><i class="fas fa-phone"></i> +54 9 3512 692064</li>
-            <li><i class="fas fa-envelope"></i> reservas@tus-cabanas.com</li>
+            <li><i class="fas fa-phone"></i> +54 9 351 2173571</li>
+            <li><i class="fas fa-envelope"></i> edgardo.davilaos@gmail.com</li>
             <li><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</li>
           </ul>
           <p class="cta-tip">Tip: enviá fecha + cantidad de personas y te pasamos opciones.</p>
@@ -533,8 +535,8 @@
       <div class="footer-section">
         <h3>Contacto</h3>
         <ul class="footer-links">
-          <li><a href="tel:+5493512692064"><i class="fas fa-phone"></i> +54 9 3512 692064</a></li>
-          <li><a href="mailto:reservas@tus-cabanas.com"><i class="fas fa-envelope"></i> reservas@tus-cabanas.com</a></li>
+          <li><a href="tel:+5493512173571"><i class="fas fa-phone"></i> +54 9 351 2173571</a></li>
+          <li><a href="mailto:edgardo.davilaos@gmail.com"><i class="fas fa-envelope"></i> edgardo.davilaos@gmail.com</a></li>
           <li><span><i class="fas fa-location-dot"></i> Potrero de Garay, Córdoba</span></li>
         </ul>
       </div>
@@ -560,7 +562,7 @@
 
   <!-- WhatsApp flotante -->
   <a class="wsp-float" id="wspFloat"
-     href="https://wa.me/5493512692064" target="_blank"
+     href="https://wa.me/5493512173571" target="_blank"
      aria-label="Abrir WhatsApp para consultar" rel="noopener">
     <i class="fab fa-whatsapp"></i>
   </a>
