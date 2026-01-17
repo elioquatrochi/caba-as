@@ -19,8 +19,7 @@
     <div class="brand">
       <div class="brand-title">Calendario de Reservas</div>
       <div class="brand-sub">
-        Las fechas anteriores a hoy quedan bloqueadas. Las reservas confirmadas aparecen en rojo (por noche).
-        <b>El día de check-out queda disponible</b>.
+    
       </div>
     </div>
 
@@ -58,6 +57,7 @@
               <div class="field">
                 <span>Personas</span>
                 <select id="personas" required>
+                   <option value="1">1 persona</option>
                   <option value="2">2 personas</option>
                   <option value="3">3 personas</option>
                   <option value="4">4 personas</option>
@@ -95,7 +95,7 @@
             </div>
           </form>
 
-          <div class="footnote">UI servida por Apps Script + datos en Google Sheets.</div>
+          
         </div>
       </section>
 
@@ -103,7 +103,7 @@
       <section class="card">
         <div class="cardHead">
           <h2>Disponibilidad</h2>
-          <p class="sub">Calendario (bloquea pasado + confirmadas por noche)</p>
+       
         </div>
 
         <div class="cardBody">
@@ -124,7 +124,7 @@
               </div>
               <ul id="listaConfirmadas" class="list"></ul>
               <div class="muted small" style="margin-top:.5rem">
-                Nota: el calendario pinta <b>por noche</b>. El día de check-out queda libre.
+              
               </div>
             </div>
 
