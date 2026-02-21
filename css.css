@@ -1132,7 +1132,7 @@ body{
 .scroll-to-top{
   position: fixed;
   right: 18px;
-  bottom: 96px;
+  top: 650px; /* ← ajustá este valor */
   width: 46px;
   height: 46px;
   border-radius: 14px;
@@ -1140,11 +1140,14 @@ body{
   background: rgba(255,255,255,.9);
   cursor: pointer;
   display: none;
-  z-index: 2500;
+  z-index: 4000;
   box-shadow: 0 12px 26px rgba(0,0,0,.10);
 }
-.scroll-to-top.is-visible{ display: grid; place-items: center; }
 
+.scroll-to-top.is-visible{
+  display: grid;
+  place-items: center;
+}
 .wsp-float{
   position: fixed;
   right: 18px;
