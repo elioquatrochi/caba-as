@@ -29,7 +29,7 @@ function jsonp(url, timeoutMs = 12000) {
 // =========================
 // CONFIG
 // =========================
-const API_BASE = "https://script.google.com/macros/s/AKfycbwIxzLZlq0NIJgDfGUpMddei2MknrBwgsmCCPNtNvwaHXmhnJB-nPETBIW4d5zQzPr_/exec";
+const API_BASE = "https://script.google.com/macros/s/AKfycbxH2JEGEehY2WAlvttgdrAdW0V5z1K08h2JxGhnzpmkZRmL_hc50xzN8LuqA2DtsZ0/exec";
 
 // =========================
 // HELPERS
