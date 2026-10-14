@@ -1,50 +1,62 @@
+
 function jsonp(url, timeoutMs = 12000) {
   return new Promise((resolve, reject) => {
     const cbName = "cb_" + Math.random().toString(36).slice(2);
     const script = document.createElement("script");
     let done = false;
+    let t;
 
     const cleanup = () => {
       if (done) return;
       done = true;
-      try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+
+      try {
+        delete window[cbName];
+      } catch (e) {
+        window[cbName] = undefined;
+      }
+
       script.remove();
       clearTimeout(t);
     };
 
-    window[cbName] = (data) => { cleanup(); resolve(data); };
-    script.onerror = () => { cleanup(); reject(new Error("JSONP error")); };
+    window[cbName] = (data) => {
+      cleanup();
+      resolve(data);
+    };
 
-    const t = setTimeout(() => { cleanup(); reject(new Error("JSONP timeout")); }, timeoutMs);
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("No se pudo conectar con el servidor."));
+    };
+
+    t = setTimeout(() => {
+      cleanup();
+      reject(new Error("Tiempo de espera agotado al conectar con el servidor."));
+    }, timeoutMs);
 
     const sep = url.includes("?") ? "&" : "?";
     script.src = `${url}${sep}callback=${cbName}`;
+
     document.body.appendChild(script);
   });
 }
 
-// =========================
-// CONFIG
-// =========================
-const VERSION = "20260108-PRICE>=4-75K";
+// ==================================================
+// CONFIGURACIÓN
+// ==================================================
+const VERSION = "20261013-1";
 
-// TU WEBAPP
-const API_BASE = "https://script.google.com/macros/s/AKfycbwIxzLZlq0NIJgDfGUpMddei2MknrBwgsmCCPNtNvwaHXmhnJB-nPETBIW4d5zQzPr_/exec";
+const API_BASE =
+  "https://script.google.com/macros/s/AKfycbxH2JEGEehY2WAlvttgdrAdW0V5z1K08h2JxGhnzpmkZRmL_hc50xzN8LuqA2DtsZ0/exec";
 
-// Mensajes
 const CHECKIN_TIME = "12:00";
 const CHECKOUT_TIME = "09:00";
 const REMINDER_TEXT = "Llevar ropa blanca (sábanas y toallas).";
-const DEPOSIT_PCT = 0.50;
 
-// PRECIOS (REGLA: >=4 noches => 75.000)
-const RATE_SHORT = 85000;          // 1..3 noches
-const RATE_LONG  = 75000;          // >= 4 noches
-const LONG_FROM_NIGHTS  = 4;
-
-// =========================
+// ==================================================
 // DOM
-// =========================
+// ==================================================
 const $ = (id) => document.getElementById(id);
 
 const loginBox = $("loginBox");
@@ -54,7 +66,6 @@ const btnLogin = $("btnLogin");
 const loginMsg = $("loginMsg");
 
 const btnLogout = $("btnLogout");
-const btnReset = $("btnReset");
 const btnReload = $("btnReload");
 
 const fCabana = $("fCabana");
@@ -63,155 +74,183 @@ const q = $("q");
 
 const statusLine = $("statusLine");
 const tbody = $("tbody");
-const verLine = $("verLine");
 
-// =========================
-// STATE
-// =========================
+// ==================================================
+// ESTADO
+// ==================================================
 let pin = sessionStorage.getItem("owner_pin") || "";
 let all = [];
 
-// =========================
-// HELPERS
-// =========================
-function esc(s){
-  return String(s||"").replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+// ==================================================
+// UTILIDADES
+// ==================================================
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (m) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
   }[m]));
 }
 
-function formatARS(n){
-  const v = Number(n || 0);
-  return "$ " + Math.round(v).toLocaleString("es-AR");
-}
+function chip(estado) {
+  const e = String(estado || "").toUpperCase();
 
-function chip(estado){
-  const e = String(estado||"").toUpperCase();
   const cls =
     e === "CONFIRMADA" ? "confirmada" :
     e === "RECHAZADA" ? "rechazada" :
-    e === "CANCELADA" ? "cancelada" : "pendiente";
+    e === "CANCELADA" ? "cancelada" :
+    "pendiente";
+
   return `<span class="chip ${cls}">${esc(e || "PENDIENTE")}</span>`;
 }
 
-// Fechas robustas (UTC) para evitar problemas raros
-function parseISOToUTCDate(iso){
-  const [y,m,d] = String(iso||"").split("-").map(Number);
-  return new Date(Date.UTC(y, (m||1)-1, d||1, 0,0,0,0));
-}
-
-function nightsBetween(checkinISO, checkoutISO){
+// Calcula únicamente la cantidad de noches. No calcula precios.
+function nightsBetween(checkinISO, checkoutISO) {
   if (!checkinISO || !checkoutISO) return 0;
-  const a = parseISOToUTCDate(checkinISO);
-  const b = parseISOToUTCDate(checkoutISO);
-  const ms = b.getTime() - a.getTime();
-  const n = Math.round(ms / 86400000);
-  return Math.max(0, n);
+
+  const partsA = String(checkinISO).split("-").map(Number);
+  const partsB = String(checkoutISO).split("-").map(Number);
+
+  const a = Date.UTC(
+    partsA[0],
+    partsA[1] - 1,
+    partsA[2]
+  );
+
+  const b = Date.UTC(
+    partsB[0],
+    partsB[1] - 1,
+    partsB[2]
+  );
+
+  return Math.max(
+    0,
+    Math.round((b - a) / 86400000)
+  );
 }
 
-function rateForNights(n){
-  return (n >= LONG_FROM_NIGHTS) ? RATE_LONG : RATE_SHORT;
-}
+function normalizeArPhone(tel) {
+  let digits = String(tel || "").replace(/\D/g, "");
 
-function calcPricing(checkinISO, checkoutISO){
-  const nights = nightsBetween(checkinISO, checkoutISO);
-  const rate = rateForNights(nights);
-  const total = nights * rate;
-  const deposit = total * DEPOSIT_PCT;
-  return { nights, rate, total, deposit };
-}
-
-function normalizeArPhone(tel){
-  let digits = String(tel||"").replace(/\D/g,"");
   digits = digits.replace(/^0+/, "");
+
   if (digits.startsWith("549")) return digits;
   if (digits.startsWith("54")) return "549" + digits.slice(2);
+
   return "549" + digits;
 }
 
-function waUrl(tel, msg){
+function waUrl(tel, msg) {
   const phone = normalizeArPhone(tel);
+
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }
 
-// API con overridePin para validar sin “logear”
+// ==================================================
+// API
+// ==================================================
 async function api(action, params = {}, overridePin) {
-  const qs = new URLSearchParams({ action, pin: overridePin ?? pin, ...params });
-  // cache-bust: fuerza a que el navegador no use respuesta vieja
+  const qs = new URLSearchParams({
+    action,
+    pin: overridePin ?? pin,
+    ...params
+  });
+
+  // Evita respuestas almacenadas en caché.
   qs.set("_v", VERSION);
+
   return await jsonp(`${API_BASE}?${qs.toString()}`);
 }
 
-// SIEMPRE usamos la regla local (>=4 => 75k) para que no dependa del backend
-function pricingForRow(r){
-  return calcPricing(r.checkin, r.checkout);
-}
+// ==================================================
+// MENSAJE DE WHATSAPP — SIN PRECIOS NI SEÑA
+// ==================================================
+function buildMsg(r) {
+  const estado = String(r.estado || "").toUpperCase();
 
-function buildMsg(r){
-  const p = pricingForRow(r);
+  if (estado === "RECHAZADA" || estado === "CANCELADA") {
+    return (
+      `Hola ${r.nombre}, gracias por tu solicitud.\n` +
+      `Por el momento no hay disponibilidad para ` +
+      `${r.checkin} a ${r.checkout} (${r.cabana}).\n` +
+      `Si querés, decime otras fechas y lo revisamos.`
+    );
+  }
+
+  const nights = nightsBetween(r.checkin, r.checkout);
 
   const base =
     `Cabaña: ${r.cabana}\n` +
     `Personas: ${r.personas}\n` +
     `Ingreso: ${r.checkin} (desde ${CHECKIN_TIME})\n` +
     `Salida: ${r.checkout} (hasta ${CHECKOUT_TIME})\n` +
-    `Noches: ${p.nights}\n` +
-    `Tarifa por noche: ${formatARS(p.rate)}\n` +
-    `Total: ${formatARS(p.total)}\n` +
-    `Seña 50%: ${formatARS(p.deposit)}\n` +
+    `Noches: ${nights}\n` +
     `Recordatorio: ${REMINDER_TEXT}\n`;
 
-  const e = String(r.estado||"").toUpperCase();
-
-  if (e === "CONFIRMADA"){
+  if (estado === "CONFIRMADA") {
     return (
       `Hola ${r.nombre}, tu reserva quedó CONFIRMADA.\n\n` +
       base +
-      `Para reservar se solicita seña del 50% del total.\n` +
       `Cualquier consulta, respondé este mensaje.`
-    );
-  }
-
-  if (e === "RECHAZADA" || e === "CANCELADA"){
-    return (
-      `Hola ${r.nombre}, gracias por tu solicitud.\n` +
-      `Por el momento no hay disponibilidad para ${r.checkin} a ${r.checkout} (${r.cabana}).\n` +
-      `Si querés, decime otras fechas y lo revisamos.`
     );
   }
 
   return (
     `Hola ${r.nombre}, recibimos tu solicitud.\n\n` +
     base +
-    `En breve te confirmamos disponibilidad. Para reservar se solicita seña del 50% del total.`
+    `En breve te confirmamos disponibilidad.`
   );
 }
 
-function applyFilters(list){
+// ==================================================
+// FILTROS
+// ==================================================
+function applyFilters(list) {
   const cab = fCabana.value;
   const est = fEstado.value;
   const term = q.value.trim().toLowerCase();
 
-  return list.filter(r => {
+  return list.filter((r) => {
     if (cab && String(r.cabana) !== cab) return false;
-    if (est && String(r.estado||"").toUpperCase() !== est) return false;
 
-    if (term){
+    if (
+      est &&
+      String(r.estado || "").toUpperCase() !== est
+    ) {
+      return false;
+    }
+
+    if (term) {
       const hay = [
-        r.nombre, r.telefono, r.cabana, r.checkin, r.checkout, r.estado, r.createdAt
+        r.nombre,
+        r.telefono,
+        r.cabana,
+        r.checkin,
+        r.checkout,
+        r.estado,
+        r.createdAt
       ].join(" ").toLowerCase();
+
       if (!hay.includes(term)) return false;
     }
+
     return true;
   });
 }
 
-function render(){
+// ==================================================
+// RENDERIZADO DEL PANEL — SIN COLUMNA TOTAL
+// ==================================================
+function render() {
   const filtered = applyFilters(all);
-  statusLine.textContent = `Mostrando ${filtered.length} de ${all.length} reservas.`;
 
-  tbody.innerHTML = filtered.map(r => {
-    const p = pricingForRow(r);
+  statusLine.textContent =
+    `Mostrando ${filtered.length} de ${all.length} reservas.`;
+
+  tbody.innerHTML = filtered.map((r) => {
+    const nights = nightsBetween(r.checkin, r.checkout);
     const msg = buildMsg(r);
     const wa = waUrl(r.telefono, msg);
 
@@ -224,15 +263,34 @@ function render(){
         <td>${esc(r.personas)}</td>
         <td>${esc(r.checkin)}</td>
         <td>${esc(r.checkout)}</td>
-        <td>${esc(p.nights)}</td>
-        <td><b>${esc(formatARS(p.total))}</b></td>
+        <td>${nights}</td>
         <td class="muted small">${esc(r.createdAt)}</td>
         <td>
           <div class="actions">
-            <a class="iconBtn wa" href="${wa}" target="_blank" rel="noopener">📱 WhatsApp</a>
-            <button class="iconBtn ok" data-act="confirm" data-id="${esc(r.id)}">✅ Confirmar</button>
-            <button class="iconBtn no" data-act="reject" data-id="${esc(r.id)}">❌ Rechazar</button>
-            <button class="iconBtn del" data-act="delete" data-id="${esc(r.id)}">🗑 Eliminar</button>
+            <a
+              class="iconBtn wa"
+              href="${wa}"
+              target="_blank"
+              rel="noopener"
+            >📱 WhatsApp</a>
+
+            <button
+              class="iconBtn ok"
+              data-act="confirm"
+              data-id="${esc(r.id)}"
+            >✅ Confirmar</button>
+
+            <button
+              class="iconBtn no"
+              data-act="reject"
+              data-id="${esc(r.id)}"
+            >❌ Rechazar</button>
+
+            <button
+              class="iconBtn del"
+              data-act="delete"
+              data-id="${esc(r.id)}"
+            >🗑 Eliminar</button>
           </div>
         </td>
       </tr>
@@ -240,146 +298,195 @@ function render(){
   }).join("");
 }
 
-// Carga validando respuesta: si no es array => error (PIN inválido o deploy mal)
-async function loadOrThrow(){
+// ==================================================
+// CARGAR RESERVAS
+// ==================================================
+async function loadOrThrow() {
   statusLine.textContent = "Cargando…";
+
   const res = await api("owner_list");
-  if (!Array.isArray(res)) throw new Error(res?.error || "Respuesta inválida");
+
+  if (!Array.isArray(res)) {
+    throw new Error(res?.error || "Respuesta inválida del servidor.");
+  }
+
   all = res;
   render();
 }
 
-function showPanel(){
+// ==================================================
+// SESIÓN
+// ==================================================
+function showPanel() {
   loginBox.classList.add("hidden");
   panel.classList.remove("hidden");
 }
 
-function showLogin(){
+function showLogin() {
   panel.classList.add("hidden");
   loginBox.classList.remove("hidden");
 }
 
-function clearAuth(){
+function clearAuth() {
   sessionStorage.removeItem("owner_pin");
   pin = "";
   all = [];
 }
 
-// Login fuerte: si PIN inválido => NO entra, NO guarda, se queda en login
-async function loginWithPin(candidatePin){
+async function loginWithPin(candidatePin) {
   loginMsg.textContent = "";
   statusLine.textContent = "";
 
-  const p = String(candidatePin || "").trim();
-  if (!p) { loginMsg.textContent = "Ingresá PIN."; return; }
+  const candidate = String(candidatePin || "").trim();
 
-  try{
-    // validar PIN REAL antes de entrar
-    const test = await api("owner_list", {}, p);
-    if (!Array.isArray(test)) throw new Error(test?.error || "PIN inválido");
+  if (!candidate) {
+    loginMsg.textContent = "Ingresá el PIN.";
+    return;
+  }
 
-    pin = p;
+  try {
+    const test = await api("owner_list", {}, candidate);
+
+    if (!Array.isArray(test)) {
+      throw new Error(test?.error || "No se pudo validar el PIN.");
+    }
+
+    pin = candidate;
     sessionStorage.setItem("owner_pin", pin);
-    showPanel();
+
     all = test;
+
+    showPanel();
     render();
+
   } catch (err) {
-    console.error(err);
+    console.error("Error de inicio de sesión:", err);
+
     clearAuth();
     showLogin();
-    loginMsg.textContent = "PIN inválido. No se puede ingresar.";
+
+    loginMsg.textContent =
+      err.message || "No se pudo validar el PIN.";
   }
 }
 
-// =========================
-// EVENTS
-// =========================
+// ==================================================
+// EVENTOS
+// ==================================================
 btnLogin.addEventListener("click", async () => {
   await loginWithPin(pinEl.value);
+});
+
+pinEl.addEventListener("keydown", async (ev) => {
+  if (ev.key === "Enter") {
+    await loginWithPin(pinEl.value);
+  }
 });
 
 btnLogout.addEventListener("click", () => {
   clearAuth();
   pinEl.value = "";
+  loginMsg.textContent = "";
   showLogin();
 });
 
 btnReload.addEventListener("click", async () => {
-  try{ await loadOrThrow(); }
-  catch(e){
-    console.error(e);
+  try {
+    await loadOrThrow();
+  } catch (err) {
+    console.error(err);
+
     clearAuth();
     showLogin();
-    loginMsg.textContent = "Sesión inválida. Volvé a ingresar el PIN.";
+
+    loginMsg.textContent =
+      "No se pudieron cargar las reservas. Revisá la conexión y el PIN.";
   }
 });
 
-[fCabana, fEstado, q].forEach(el => el.addEventListener("input", render));
+[fCabana, fEstado, q].forEach((el) => {
+  el.addEventListener("input", render);
+});
 
 tbody.addEventListener("click", async (ev) => {
   const btn = ev.target.closest("button[data-act]");
+
   if (!btn) return;
 
   const act = btn.dataset.act;
   const id = btn.dataset.id;
 
-  try{
+  try {
     if (act === "delete") {
       if (!confirm("¿Eliminar esta reserva?")) return;
-      const r = await api("owner_delete", { id });
-      if (!r.ok) { alert(r.error || "No se pudo eliminar"); return; }
+
+      const res = await api("owner_delete", { id });
+
+      if (!res.ok) {
+        alert(res.error || "No se pudo eliminar.");
+        return;
+      }
+
       await loadOrThrow();
       return;
     }
 
     if (act === "confirm" || act === "reject") {
-      const label = act === "confirm" ? "CONFIRMAR" : "RECHAZAR";
+      const label =
+        act === "confirm" ? "CONFIRMAR" : "RECHAZAR";
+
       if (!confirm(`¿${label} esta reserva?`)) return;
 
-      const r = await api("owner_decide", { id, decision: act });
-      if (!r.ok) { alert(r.error || "No se pudo actualizar"); }
+      const res = await api("owner_decide", {
+        id,
+        decision: act
+      });
+
+      if (!res.ok) {
+        alert(res.error || "No se pudo actualizar la reserva.");
+      }
+
       await loadOrThrow();
     }
-  } catch (e) {
-    console.error(e);
-    clearAuth();
-    showLogin();
-    loginMsg.textContent = "Sesión inválida. Volvé a ingresar el PIN.";
+
+  } catch (err) {
+    console.error("Error en la operación:", err);
+
+    alert(
+      "No se pudo completar la operación. " +
+      "Revisá la conexión e intentá nuevamente."
+    );
   }
 });
 
-btnReset.addEventListener("click", async () => {
-  if (!confirm("Esto BORRA TODO y deja la hoja en cero. ¿Confirmás?")) return;
-  try{
-    const r = await api("owner_reset");
-    if (!r.ok) { alert(r.error || "No se pudo resetear"); return; }
-    await loadOrThrow();
-  } catch(e) {
-    console.error(e);
-    clearAuth();
-    showLogin();
-    loginMsg.textContent = "Sesión inválida. Volvé a ingresar el PIN.";
-  }
-});
-
-// Auto-login SOLO si el PIN guardado es válido
+// ==================================================
+// INICIO AUTOMÁTICO
+// ==================================================
 window.addEventListener("DOMContentLoaded", async () => {
-  if (verLine) {
-    verLine.textContent = `owner.js v${VERSION} · regla: >=${LONG_FROM_NIGHTS} noches => ${formatARS(RATE_LONG)} · API: ${API_BASE.slice(0, 45)}…`;
+  if (!pin) {
+    showLogin();
+    return;
   }
 
-  if (!pin) { showLogin(); return; }
-
-  try{
+  try {
     const test = await api("owner_list", {}, pin);
-    if (!Array.isArray(test)) throw new Error(test?.error || "PIN inválido");
-    showPanel();
+
+    if (!Array.isArray(test)) {
+      throw new Error(test?.error || "Sesión inválida.");
+    }
+
     all = test;
+
+    showPanel();
     render();
-  } catch(e){
-    console.error(e);
+
+  } catch (err) {
+    console.error("Error al restaurar la sesión:", err);
+
     clearAuth();
     showLogin();
-    loginMsg.textContent = "PIN inválido o vencido. Ingresá nuevamente.";
+
+    loginMsg.textContent =
+      "La sesión venció o no se pudo conectar. Ingresá nuevamente el PIN.";
   }
 });

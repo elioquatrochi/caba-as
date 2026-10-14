@@ -1,44 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="es-AR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Panel del Dueño</title>
-  <link rel="stylesheet" href="owner.css?v=20260108-2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Panel del Dueño - Sol y Luna</title>
+
+  <link rel="stylesheet" href="owner.css?v=20261013-1" />
 </head>
 
 <body>
   <div class="wrap">
+
     <header class="top">
       <div class="topLeft">
         <h1>Panel del Dueño</h1>
-        
- 
       </div>
 
       <div class="topActions">
-        <button id="btnReload" class="btn ghost">Recargar</button>
-       <!-- <button id="btnReset" class="btn danger">Reset total</button>-->
-        <button id="btnLogout" class="btn ghost">Salir</button>
+        <button id="btnReload" class="btn ghost">
+          Recargar
+        </button>
+
+        <button id="btnLogout" class="btn ghost">
+          Salir
+        </button>
       </div>
     </header>
 
-    <!-- LOGIN -->
+    <!-- INICIO DE SESIÓN -->
     <section id="loginBox" class="card">
       <div class="row">
         <label>
           PIN
-          <input id="pin" type="password" placeholder="Ingresá tu PIN" />
+          <input
+            id="pin"
+            type="password"
+            placeholder="Ingresá tu PIN"
+            autocomplete="current-password"
+          />
         </label>
-        <button id="btnLogin" class="btn">Entrar</button>
+
+        <button id="btnLogin" class="btn">
+          Entrar
+        </button>
       </div>
+
       <div id="loginMsg" class="msg"></div>
     </section>
 
-    <!-- PANEL -->
+    <!-- PANEL DE RESERVAS -->
     <section id="panel" class="card hidden">
+
       <div class="filters">
         <div class="row">
+
           <label>
             Cabaña
             <select id="fCabana">
@@ -63,8 +80,12 @@
 
           <label class="grow">
             Buscar
-            <input id="q" placeholder="Nombre / Teléfono / Fechas" />
+            <input
+              id="q"
+              placeholder="Nombre / Teléfono / Fechas"
+            />
           </label>
+
         </div>
 
         <div id="statusLine" class="muted"></div>
@@ -72,6 +93,7 @@
 
       <div class="tableWrap">
         <table class="table ownerTable">
+
           <thead>
             <tr>
               <th>Estado</th>
@@ -82,21 +104,20 @@
               <th>Check-in</th>
               <th>Check-out</th>
               <th>Noches</th>
-              <th>Total</th>
               <th>Creado</th>
               <th>Acciones</th>
             </tr>
           </thead>
+
           <tbody id="tbody"></tbody>
+
         </table>
       </div>
 
-      <div class="foot muted small">
-        Tip: el total se toma del backend (Código.gs). Si 4 noches = $300.000, estás OK.
-      </div>
     </section>
+
   </div>
 
-  <script src="owner.js"></script>
+  <script src="owner.js?v=20261013-1"></script>
 </body>
 </html>
